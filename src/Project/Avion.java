@@ -70,7 +70,7 @@ public class Avion implements Serializable {
         this.propulsion = propulsion;
     }
 
-
+    
     @Override
     public String toString() {
         return "Avion{" +
