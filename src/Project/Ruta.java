@@ -15,7 +15,7 @@ public class Ruta {
         this.km = km;
     }
 
-    public int kmPorRuta(String rutaBuscada, List<Ruta> listasRutas){
+    public static int kmPorRuta(String rutaBuscada, List<Ruta> listasRutas){
         int km = 0;
         for (Ruta buscada:listasRutas) {
             if(rutaBuscada.equals(buscada.getNombre()) == true){
@@ -25,27 +25,20 @@ public class Ruta {
         return km;
     }
 
-    public int buscarRuta(List<Ruta> listasRutas){
-        String origen;
-        String destino;
-        Scanner entrada = new Scanner(System.in);
-        System.out.println("Ingrese la ciudad de Origen: ");
-        origen = entrada.nextLine();
-        System.out.println("Ingrese la ciudad de destino: ");
-        destino = entrada.nextLine();
+    public static int buscarRuta(List<Ruta> listasRutas,String origen,String destino){
         String rutaBuscada = origen + " "+destino;
         int km = kmPorRuta(rutaBuscada,listasRutas);
         return km;
     }
 
-    public float costoPorVuelo(float costoKm, int pasajeros, List<Ruta> listasRutas){
+    /*public static float costoPorVuelo(float costoKm, int pasajeros, List<Ruta> listasRutas){
         float costoTotal=0.0F;
         int km = buscarRuta(listasRutas);
         Tarifas tarifa = new Tarifas();
         int tari = tarifa.getGold();
         costoTotal = (((float)km * costoKm) + (pasajeros * 3500) + (tari));
         return costoTotal;
-    }
+    }*/
 
 
 

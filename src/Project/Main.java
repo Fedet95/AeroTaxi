@@ -1,18 +1,19 @@
 package Project;
 
+import java.rmi.server.RemoteServer;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDate;
 
 public class Main {
     public static void main(String[] args){
 
         Gold avionGold = new Gold(5000,150,50,12000,Propulsion.PISTON,false);
-        /*
-        System.out.println(avionGold);
-
         Usuario usuario1 = new Usuario("Federico","Tacchini",38829242,26);
+        Usuario usuario2 = new Usuario("Samuel","Tocaimaza",32836243,34);
 
-        System.out.println(usuario1);*/
+
+
 
         /////PRUEBAS DE RUTAS AERES ////
 
@@ -31,24 +32,20 @@ public class Main {
         listaRutasAereas.add(cordobaSantiago);
         listaRutasAereas.add(montevideoSantiago);
 
-        System.out.println(listaRutasAereas.toString());
 
-        ////a traves de estas dos funciones puedo ingresar por teclado la ciudad de origen y destino
-        //// y retornar un entero con la cantidad de kilometros///.
-        //
-        int kms = bsasCordoba.buscarRuta(listaRutasAereas);
-        System.out.println("Los kilometros desde Cordoba a Montevideo son:" + kms);
-        //
-        /////////////////////////////////////////////////////////////////////////////////
-        //// prueba de como calcular las tarifas ////////////
-        ////
-        // Calculamos un vuelvo de BsAs a Cordoba, de 10 personas en avion Gold: 145.250
-        //
-        float costoVuelo = bsasCordoba.costoPorVuelo(avionGold.getCostoKm(),10,listaRutasAereas);
-        System.out.println("El costo del vuelo es de: " + costoVuelo);
+        ///// CREAMOS UNA LISTA DE VUELOS: (PASAR A JSON Y ALMACENAR)///
+        Vuelo buenosAiresACordoba = new Vuelo("BsAs","Cordoba",usuario2,"10062021",avionGold);
+        Vuelo cordobaASantiago = new Vuelo("Cordoba","Santiago",usuario1,"11062021",avionGold);
+        List<Vuelo> listaVuelos = new ArrayList<>();
+        listaVuelos.add(buenosAiresACordoba);
+        listaVuelos.add(cordobaASantiago);
 
 
+        /// CREAMOS UNA FUNCIÓN PARA CARGAR VUELOS:
 
+        Vuelo nuevo = new Vuelo();
+        nuevo.reserva(listaVuelos,listaRutasAereas,avionGold,usuario2);
+        System.out.println(listaVuelos.toString());
 
 
 

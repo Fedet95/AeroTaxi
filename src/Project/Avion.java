@@ -1,6 +1,8 @@
 package Project;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Avion implements Serializable {
@@ -12,9 +14,10 @@ public class Avion implements Serializable {
     private float velocidadMax;
     private Propulsion propulsion;
 
-
     public Avion() {
     }
+
+
 
     public Avion(float capacidadCombustible, float costoKm, int capacidadMax, float velocidadMax, Propulsion propulsion) {
         this.capacidadCombustible = capacidadCombustible;
