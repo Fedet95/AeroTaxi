@@ -34,18 +34,24 @@ public class Main {
 
 
         ///// CREAMOS UNA LISTA DE VUELOS: (PASAR A JSON Y ALMACENAR)///
-        Vuelo buenosAiresACordoba = new Vuelo("BsAs","Cordoba",usuario2,"10062021",avionGold);
-        Vuelo cordobaASantiago = new Vuelo("Cordoba","Santiago",usuario1,"11062021",avionGold);
+        Vuelo buenosAiresACordoba = new Vuelo("BsAs","Cordoba",usuario1,"11062021",avionGold);
+        Vuelo cordobaASantiago = new Vuelo("Cordoba","Santiago",usuario2,"12062021",avionGold);
         List<Vuelo> listaVuelos = new ArrayList<>();
         listaVuelos.add(buenosAiresACordoba);
         listaVuelos.add(cordobaASantiago);
-
+        System.out.println(listaVuelos.toString());
 
         /// CREAMOS UNA FUNCIÓN PARA CARGAR VUELOS:
 
-        Vuelo nuevo = new Vuelo();
+        /*Vuelo nuevo = new Vuelo();
         nuevo.reserva(listaVuelos,listaRutasAereas,avionGold,usuario2);
+        System.out.println(listaVuelos.toString());*/
+
+        /// FUNCIÓN QUE BORRA VUELOS
+
+        Vuelo.borrarReserva(listaVuelos);
         System.out.println(listaVuelos.toString());
+
 
 
 

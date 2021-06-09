@@ -1,8 +1,11 @@
 package Project;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class Vuelo {
+    private String id = UUID.randomUUID().toString().replaceAll("[^0-1]", "");
     private String origen;
     private String destino;
     private Usuario usuario;
@@ -19,10 +22,7 @@ public class Vuelo {
         this.fecha = fecha;
         this.avion = avion;
     }
-
-
-
-    ///función para cargar vuelos: ///
+///FUNCIÓN PARA CARGAR VUELOS: ///
 
     public void reserva(List<Vuelo> listaVuelos,List<Ruta> listaRutasAereas,Avion avioncito, Usuario usuarioFinal){
 
@@ -73,11 +73,30 @@ public class Vuelo {
 
     }
 
+    /// FUNCIÓN PARA BORRAR UNA RESERVA ///
+
+
+    public static void borrarReserva(List<Vuelo> listaVuelos){
+        Scanner entrada = new Scanner(System.in);
+        System.out.println("Ingrese el numero de vuelo a cancelar: ");
+        String numeroBuscado = entrada.nextLine();
+
+        for (Vuelo vuelito:listaVuelos) {
+            if(vuelito.id.equals(numeroBuscado)){
+                ///VALIDACIÓN: NO SE PUEDE CANCELAR EL VUELO EL MISMO DIA:
+
+                listaVuelos.remove(vuelito);
+            }else{
+                System.out.println("No se encontro ese vuelo");
+            }
+        }
+    }
 
     @Override
     public String toString() {
         return "Vuelo{" +
-                "origen='" + origen + '\'' +
+                "id=" + id +
+                ", origen='" + origen + '\'' +
                 ", destino='" + destino + '\'' +
                 ", usuario=" + usuario +
                 ", fecha='" + fecha + '\'' +
