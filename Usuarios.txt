@@ -1,0 +1,18 @@
+[
+  {
+    "nombre": "qwe",
+    "apellido": "qwe",
+    "DNI": 123,
+    "edad": 12,
+    "username": "QWEQWE",
+    "pw": "qe12"
+  },
+  {
+    "nombre": "Federico",
+    "apellido": "Tacchini",
+    "DNI": 38829242,
+    "edad": 26,
+    "username": "FEDERICOTACCHINI",
+    "pw": "qwe12"
+  }
+]

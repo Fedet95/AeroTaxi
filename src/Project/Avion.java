@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public class Avion implements Serializable {
 
-    private String id = UUID.randomUUID().toString();
+    private String id = UUID.randomUUID().toString().replaceAll("[^0-1]", "");
     private float capacidadCombustible;
     private float costoKm;
     private int capacidadMax;
