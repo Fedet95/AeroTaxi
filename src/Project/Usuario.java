@@ -17,6 +17,7 @@ public class Usuario {
         this.edad = edad;
     }
 
+
     public String getNombre() {
         return nombre;
     }

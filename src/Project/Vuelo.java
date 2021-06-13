@@ -12,6 +12,7 @@ public class Vuelo {
     private String fecha;
     private Avion avion;
 
+
     public Vuelo() {
     }
 
@@ -24,7 +25,7 @@ public class Vuelo {
     }
 ///FUNCIÓN PARA CARGAR VUELOS: ///
 
-    public void reserva(List<Vuelo> listaVuelos,List<Ruta> listaRutasAereas,Avion avioncito, Usuario usuarioFinal){
+    public static void reserva(List<Vuelo> listaVuelos,List<Ruta> listaRutasAereas,Avion avioncito, Usuario usuarioFinal){
 
         Scanner entrada = new Scanner(System.in);
 
@@ -80,17 +81,108 @@ public class Vuelo {
         Scanner entrada = new Scanner(System.in);
         System.out.println("Ingrese el numero de vuelo a cancelar: ");
         String numeroBuscado = entrada.nextLine();
-
+        String fechaActual = LocalDate.now().toString();
+        boolean encontrado = false;
         for (Vuelo vuelito:listaVuelos) {
             if(vuelito.id.equals(numeroBuscado)){
-                ///VALIDACIÓN: NO SE PUEDE CANCELAR EL VUELO EL MISMO DIA:
-
+                if(vuelito.fecha.equals(fechaActual)) {
+                    System.out.println("No se puede cancelar este vuelo porque faltan menos de 24 hs");
+                    return;
+                    }
                 listaVuelos.remove(vuelito);
-            }else{
-                System.out.println("No se encontro ese vuelo");
+                encontrado = true;
+            }
+        }
+        if(encontrado==false){
+            System.out.println("No se encuentra ese ID de vuelo");
+        }
+    }
+
+    public static void muestroVuelosPorFecha(List<Vuelo> listaVuelos){
+        System.out.println("- Buscamos vuelos por fecha: ");
+        System.out.println("Ingrese fecha: ");
+        Scanner entrada = new Scanner(System.in);
+        String fecha = entrada.nextLine();
+        for (Vuelo vuelito:listaVuelos) {
+            if(vuelito.fecha.equals(fecha)){
+                System.out.println(vuelito.toString());
             }
         }
     }
+
+    public static int categoriaMejorAvionUtilizado(List<Vuelo> listaVuelos,Usuario usuario){
+       int rta = 0;
+            for (Vuelo vuelito:listaVuelos) {
+                if(vuelito.usuario.equals(usuario)){
+                    rta = utilizoServicioGold(listaVuelos,usuario);
+                    if(rta==1){return rta;}
+                }
+            }
+
+            for (Vuelo vuelito:listaVuelos) {
+                if(vuelito.usuario.equals(usuario)){
+                    rta = utilizoServicioSilver(listaVuelos,usuario);
+                    if(rta==2){return rta;}
+                }
+            }
+
+            for (Vuelo vuelito:listaVuelos) {
+                if(vuelito.usuario.equals(usuario)){
+                    rta = utilizoServicioBronce(listaVuelos,usuario);
+                    if(rta==3){return rta;}
+                }
+            }
+        return rta;
+    }
+
+
+    public static int utilizoServicioGold(List<Vuelo> listaVuelos,Usuario usuario) {
+        int rta = 0;
+        String aux;
+        for (Vuelo vuelito : listaVuelos) {
+            if(vuelito.usuario.equals(usuario)){
+                aux = vuelito.avion.getClass().getSimpleName();
+                if (aux.equals("Gold")) {
+                    rta = 1;
+                }
+            }
+        }
+        return rta;
+    }
+
+    public static int utilizoServicioSilver(List<Vuelo> listaVuelos,Usuario usuario) {
+        int rta = 0;
+        String aux;
+        for (Vuelo vuelito : listaVuelos) {
+            if(vuelito.usuario.equals(usuario)){
+                aux = vuelito.avion.getClass().getSimpleName();
+                if (aux.equals("Silver")) {
+                    rta = 2;
+                }
+            }
+        }
+        return rta;
+    }
+
+    public static int utilizoServicioBronce(List<Vuelo> listaVuelos,Usuario usuario) {
+        int rta = 0;
+        String aux;
+        for (Vuelo vuelito : listaVuelos) {
+            if(vuelito.usuario.equals(usuario)){
+                aux = vuelito.avion.getClass().getSimpleName();
+                if (aux.equals("Bronce")) {
+                    rta = 3;
+                }
+            }
+        }
+        return rta;
+    }
+
+
+
+
+
+
 
     @Override
     public String toString() {
