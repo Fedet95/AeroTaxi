@@ -32,7 +32,6 @@ public class Main {
         avionList.add(new Silver("Silver",15,225,7,180,Propulsion.REACCION));
         avionList.add(new Bronce("Bronce",12,150,5,150,Propulsion.PISTON));
 
-        System.out.println(avionList);
 
         BufferedWriter writer = null;
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -258,6 +257,7 @@ public class Main {
         }
         //return archivo;
     }
+
 
 
 

@@ -38,6 +38,84 @@ public class Vuelo {
         }});
 
     }};
+
+    public Vuelo(){}
+
+    public Vuelo(Date fecha, Ciudades origen, Ciudades destino, String clientUsername, int acompañantes, Avion avion, float costoVuelo) {
+        this.fecha = fecha;
+        this.origen = origen;
+        this.destino = destino;
+        this.clientUsername = clientUsername;
+        this.acompañantes = acompañantes;
+        this.avion = avion;
+        this.costoVuelo = costoVuelo;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public Ciudades getOrigen() {
+        return origen;
+    }
+
+    public void setOrigen(Ciudades origen) {
+        this.origen = origen;
+    }
+
+    public Ciudades getDestino() {
+        return destino;
+    }
+
+    public void setDestino(Ciudades destino) {
+        this.destino = destino;
+    }
+
+    public String getClientUsername() {
+        return clientUsername;
+    }
+
+    public void setClientUsername(String clientUsername) {
+        this.clientUsername = clientUsername;
+    }
+
+    public int getAcompañantes() {
+        return acompañantes;
+    }
+
+    public void setAcompañantes(int acompañantes) {
+        this.acompañantes = acompañantes;
+    }
+
+    public Avion getAvion() {
+        return avion;
+    }
+
+    public void setAvion(Avion avion) {
+        this.avion = avion;
+    }
+
+    public float getCostoVuelo() {
+        return costoVuelo;
+    }
+
+    public void setCostoVuelo(float costoVuelo) {
+        this.costoVuelo = costoVuelo;
+    }
+
+
     public Date pedirFecha(){
 
         Date fecha = null;
@@ -219,84 +297,53 @@ public class Vuelo {
 
         Vuelo vuelo = new Vuelo(this.fecha = fecha,origen,destino,this.clientUsername = usuario.getUsername(),acompañantes,avion,costoVuelo);
         System.out.println("VUELO RESERVADO");
+        agregarVueloFile(archivo,vuelo);
         return vuelo;
     }
 
-    public Vuelo(){}
+    public static void agregarVueloFile (File archivo, Vuelo vuelo){ //retorno?
 
-    public Vuelo(Date fecha, Ciudades origen, Ciudades destino, String clientUsername, int acompañantes, Avion avion, float costoVuelo) {
-        this.fecha = fecha;
-        this.origen = origen;
-        this.destino = destino;
-        this.clientUsername = clientUsername;
-        this.acompañantes = acompañantes;
-        this.avion = avion;
-        this.costoVuelo = costoVuelo;
+        List<Vuelo> vueloList;
+        if(archivo.exists()) {
+            BufferedWriter writer = null;
+            BufferedReader reader = null;
+
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+            try {
+
+                reader = new BufferedReader(new FileReader(new File("Vuelos.txt")));
+                vueloList = gson.fromJson(reader,(new TypeToken<List<Usuario>>(){}.getType()));
+
+                if(vueloList == null) {
+                    vueloList = new ArrayList<>();
+
+                }
+                vueloList.add(vuelo);
+
+
+
+                writer = new BufferedWriter(new FileWriter(new File("Vuelos.txt")));
+                gson.toJson(vueloList, vueloList.getClass(), writer);
+
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }  finally {
+                if (writer != null && reader != null) {
+                    try {
+                        writer.close();
+                        reader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        //return archivo;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    public Ciudades getOrigen() {
-        return origen;
-    }
-
-    public void setOrigen(Ciudades origen) {
-        this.origen = origen;
-    }
-
-    public Ciudades getDestino() {
-        return destino;
-    }
-
-    public void setDestino(Ciudades destino) {
-        this.destino = destino;
-    }
-
-    public String getClientUsername() {
-        return clientUsername;
-    }
-
-    public void setClientUsername(String clientUsername) {
-        this.clientUsername = clientUsername;
-    }
-
-    public int getAcompañantes() {
-        return acompañantes;
-    }
-
-    public void setAcompañantes(int acompañantes) {
-        this.acompañantes = acompañantes;
-    }
-
-    public Avion getAvion() {
-        return avion;
-    }
-
-    public void setAvion(Avion avion) {
-        this.avion = avion;
-    }
-
-    public float getCostoVuelo() {
-        return costoVuelo;
-    }
-
-    public void setCostoVuelo(float costoVuelo) {
-        this.costoVuelo = costoVuelo;
-    }
 
 
     @Override

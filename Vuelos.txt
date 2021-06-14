@@ -1,0 +1,35 @@
+[
+  {
+    "id": "8cc47fa6-2971-416c-ae9f-7aa67d422615",
+    "fecha": "May 12, 2020, 12:00:00 AM",
+    "origen": "BSAS",
+    "destino": "CORDOBA",
+    "clientUsername": "FEDETACCHINI",
+    "acompañantes": 2,
+    "avion": {
+      "tarifa": 6000,
+      "categoria": "Gold",
+      "id": "10110",
+      "capacidadCombustible": 20,
+      "costoKm": 300.0,
+      "capacidadMax": 10,
+      "velocidadMax": 200,
+      "propulsion": "REACCION"
+    },
+    "costoVuelo": 225000.0,
+    "distancias": {
+      "MONTEVIDEO": {
+        "SANTIAGO": 2100
+      },
+      "BSAS": {
+        "MONTEVIDEO": 950,
+        "CORDOBA": 695,
+        "SANTIAGO": 1400
+      },
+      "CORDOBA": {
+        "MONTEVIDEO": 1190,
+        "SANTIAGO": 1050
+      }
+    }
+  }
+]
