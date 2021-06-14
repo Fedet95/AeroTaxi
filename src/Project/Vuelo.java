@@ -10,12 +10,15 @@ import java.nio.Buffer;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Vuelo {
 
-    private String id = UUID.randomUUID().toString();
-    private Date fecha;
+    private String id = UUID.randomUUID().toString().replaceAll("[^0-1]", "");
+    private LocalDateTime fecha;
     private Ciudades origen;
     private Ciudades destino;
     private String clientUsername;
@@ -23,7 +26,7 @@ public class Vuelo {
     private Avion avion;
     private float costoVuelo;
 
-    private final Map<Ciudades, Map<Ciudades, Integer>> distancias = new HashMap<>() {{
+    private transient final Map<Ciudades, Map<Ciudades, Integer>> distancias = new HashMap<>() {{
         put(Ciudades.BSAS, new HashMap<>() {{
             put(Ciudades.CORDOBA, 695);
             put(Ciudades.SANTIAGO, 1400);
@@ -41,7 +44,7 @@ public class Vuelo {
 
     public Vuelo(){}
 
-    public Vuelo(Date fecha, Ciudades origen, Ciudades destino, String clientUsername, int acompañantes, Avion avion, float costoVuelo) {
+    public Vuelo(LocalDateTime fecha, Ciudades origen, Ciudades destino, String clientUsername, int acompañantes, Avion avion, float costoVuelo) {
         this.fecha = fecha;
         this.origen = origen;
         this.destino = destino;
@@ -59,11 +62,11 @@ public class Vuelo {
         this.id = id;
     }
 
-    public Date getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(Date fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 
@@ -115,29 +118,11 @@ public class Vuelo {
         this.costoVuelo = costoVuelo;
     }
 
-
-    public Date pedirFecha(){
-
-        Date fecha = null;
-
-        do {
-            System.out.println("Ingrese fecha que desea viajar");
-            System.out.println("IMPORTANTE: Introduzca fecha de vuelo con formato dd/mm/aaaa");
-
-            Scanner auxi = new Scanner(System.in);
-            String fechaString = auxi.nextLine();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-            try {
-                fecha = sdf.parse(fechaString);
-            } catch (ParseException e) {
-                System.out.println("Fecha invalida");
-            }
-        }while(fecha == null);
-
-        return fecha;
-
+    public Map<Ciudades, Map<Ciudades, Integer>> getDistancias() {
+        return distancias;
     }
+
+
     public Ciudades pedirOrigen (){
         Scanner auxi = new Scanner(System.in);
         System.out.println("Ingrese NUMERO de ciudad de Origen");
@@ -194,156 +179,6 @@ public class Vuelo {
 
         return destino;
     }
-
-
-    public Vuelo reservarVuelo (File archivo, Usuario usuario){ //TODAVIA NO COMPARA FECHAS Y AVIONES DISPONIBLES
-
-        Date fecha = pedirFecha();
-        Scanner auxi = new Scanner(System.in);
-        System.out.println("Ingrese NUMERO de ciudad de Origen");
-        //Ciudades origen;
-        int i = 1;
-        for(var distancias : distancias.entrySet()){
-            System.out.println(i + ". " + distancias.getKey());
-            i++;
-        }
-        int opcionOrigen = auxi.nextInt();
-        if(opcionOrigen == 1) {
-            origen = Ciudades.MONTEVIDEO;
-        }
-        else{ if(opcionOrigen == 2) {
-            origen = Ciudades.BSAS;
-        }else{
-            origen = Ciudades.CORDOBA;
-        }}
-        System.out.println("Ciudad de origen: " +origen);
-        System.out.println("Ingrese NUMERO de ciudad de Destino: ");
-        //Ciudades destino = null;
-        int x = 1;
-        for(var distancias : distancias.get(origen).entrySet()){
-            System.out.println(x + ". " + distancias.getKey());
-            x++;
-        }
-        int opcionDestino = auxi.nextInt();
-        if(origen == Ciudades.BSAS){
-            if(opcionDestino == 1)
-                destino = Ciudades.MONTEVIDEO;
-            else if(opcionDestino == 2)
-                destino = Ciudades.CORDOBA;
-            else{
-                destino = Ciudades.SANTIAGO;
-            }
-        }
-
-        if(origen == Ciudades.CORDOBA) {
-            if (opcionDestino == 1)
-                destino = Ciudades.MONTEVIDEO;
-            else
-                destino = Ciudades.SANTIAGO;
-        }
-
-        if(origen == Ciudades.MONTEVIDEO){
-            destino = Ciudades.SANTIAGO;
-        }
-
-
-        //Seleccion de avion y tarifa
-        System.out.println("Seleccione el tipo de avion");
-        BufferedReader reader = null;
-        List<Avion> avionList = new ArrayList<>();
-        //Avion avionElegido = null;
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try {
-            reader = new BufferedReader(new FileReader(new File("Aviones.txt")));
-            avionList = gson.fromJson(reader,(new TypeToken<List<Avion>>(){}.getType()));
-
-            int p = 1;
-            if(avionList !=null){
-                for(Avion avion :avionList){
-                    System.out.println(p + ". " + avion.getCategoria());
-                    p++;
-                }
-            }
-            int opcion = auxi.nextInt();
-
-            if (opcion<=3 && opcion>=1)
-                avion = avionList.get(opcion-1);
-            else {
-                System.out.println("Forro");
-            }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }  finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        //(Cantidad de kms * Costo del km) + (cantidad de pasajeros * 3500) + (Tarifa del tipo de avión)
-        System.out.println("Ingrese cantidad de acompañantes");
-        acompañantes = auxi.nextInt();
-
-        int cantKm = distancias.get(origen).get(destino);
-        float costoKm = avion.getCostoKm();
-
-        costoVuelo = (cantKm * costoKm) + ((acompañantes+1) * 3500) + avion.getTarifa();
-
-        Vuelo vuelo = new Vuelo(this.fecha = fecha,origen,destino,this.clientUsername = usuario.getUsername(),acompañantes,avion,costoVuelo);
-        System.out.println("VUELO RESERVADO");
-        agregarVueloFile(archivo,vuelo);
-        return vuelo;
-    }
-
-    public static void agregarVueloFile (File archivo, Vuelo vuelo){ //retorno?
-
-        List<Vuelo> vueloList;
-        if(archivo.exists()) {
-            BufferedWriter writer = null;
-            BufferedReader reader = null;
-
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-            try {
-
-                reader = new BufferedReader(new FileReader(new File("Vuelos.txt")));
-                vueloList = gson.fromJson(reader,(new TypeToken<List<Usuario>>(){}.getType()));
-
-                if(vueloList == null) {
-                    vueloList = new ArrayList<>();
-
-                }
-                vueloList.add(vuelo);
-
-
-
-                writer = new BufferedWriter(new FileWriter(new File("Vuelos.txt")));
-                gson.toJson(vueloList, vueloList.getClass(), writer);
-
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }  finally {
-                if (writer != null && reader != null) {
-                    try {
-                        writer.close();
-                        reader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        //return archivo;
-    }
-
 
 
     @Override

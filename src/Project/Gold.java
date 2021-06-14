@@ -22,6 +22,7 @@ public class Gold extends Avion implements Catering{
     public String toString() {
         return "Gold{" + super.toString() +
                 "wifi=" + wifi +
+                "catering=" + catering +
                 '}';
     }
 

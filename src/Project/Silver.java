@@ -12,7 +12,8 @@ public class Silver extends Avion implements Catering {
     @Override
     public String toString() {
         return "Silver{}"
-                + super.toString();
+                + super.toString() +
+                "catering=" + catering;
     }
 
 
