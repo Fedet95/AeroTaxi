@@ -1,22 +1,26 @@
 package Project;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.UUID;
 
 public class Avion implements Serializable {
 
-    private String id = UUID.randomUUID().toString().replaceAll("[^0-1]", "");
-    private float capacidadCombustible;
+    private int tarifa;
+    private String categoria;
+    private final String id = UUID.randomUUID().toString().replaceAll("[^0-1]", "");
+    private int capacidadCombustible;
     private float costoKm;
     private int capacidadMax;
-    private float velocidadMax;
+    private int velocidadMax;
     private Propulsion propulsion;
 
 
     public Avion() {
     }
 
-    public Avion(float capacidadCombustible, float costoKm, int capacidadMax, float velocidadMax, Propulsion propulsion) {
+    public Avion(String categoria, int capacidadCombustible, float costoKm, int capacidadMax, int velocidadMax, Propulsion propulsion) {
+        this.categoria = categoria;
         this.capacidadCombustible = capacidadCombustible;
         this.costoKm = costoKm;
         this.capacidadMax = capacidadMax;
@@ -24,11 +28,27 @@ public class Avion implements Serializable {
         this.propulsion = propulsion;
     }
 
-    public float getCapacidadCombustible() {
+    public int getTarifa() {
+        return tarifa;
+    }
+
+    public void setTarifa(int tarifa) {
+        this.tarifa = tarifa;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public int getCapacidadCombustible() {
         return capacidadCombustible;
     }
 
-    public void setCapacidadCombustible(float capacidadCombustible) {
+    public void setCapacidadCombustible(int capacidadCombustible) {
         this.capacidadCombustible = capacidadCombustible;
     }
 
@@ -51,11 +71,11 @@ public class Avion implements Serializable {
         this.capacidadMax = capacidadMax;
     }
 
-    public float getVelocidadMax() {
+    public int getVelocidadMax() {
         return velocidadMax;
     }
 
-    public void setVelocidadMax(float velocidadMax) {
+    public void setVelocidadMax(int velocidadMax) {
         this.velocidadMax = velocidadMax;
     }
 
@@ -67,20 +87,18 @@ public class Avion implements Serializable {
         this.propulsion = propulsion;
     }
 
-
     @Override
     public String toString() {
-        return "Avion{" +
-                "id=" + id +
-                "capacidadCombustible=" + capacidadCombustible +
-                ", costoKm=" + costoKm +
-                ", capacidadMax=" + capacidadMax +
-                ", velocidadMax=" + velocidadMax +
-                ", propulsion='" + propulsion + '\'' +
+        return "\nAvion:{" +
+                "\nCategoria:" + categoria +
+                "\nID Avion:" + id +
+                "\nCapacidadCombustible:" + capacidadCombustible +
+                "\nCostoKm:" + costoKm +
+                "\nCapacidadMax:" + capacidadMax +
+                "\nVelocidadMax:" + velocidadMax +
+                "\nPropulsion:" + propulsion +
                 '}';
     }
-
-
 }
 
 

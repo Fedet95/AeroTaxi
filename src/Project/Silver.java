@@ -1,9 +1,12 @@
 package Project;
 
 public class Silver extends Avion implements Catering {
+    public Silver() {
+    }
 
-    public Silver(float capacidadCombustible, float costoKm, int capacidadMax, float velocidadMax, Propulsion propulsion) {
-        super(capacidadCombustible, costoKm, capacidadMax, velocidadMax, propulsion);
+    public Silver(String categoria, int capacidadCombustible, float costoKm, int capacidadMax, int velocidadMax, Propulsion propulsion) {
+        super(categoria, capacidadCombustible, costoKm, capacidadMax, velocidadMax, propulsion);
+        this.setTarifa(4000);
     }
 
     @Override

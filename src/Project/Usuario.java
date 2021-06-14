@@ -88,11 +88,11 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "Usuario{" +
-                "nombre='" + nombre + '\'' +
-                ", apellido='" + apellido + '\'' +
-                ", DNI=" + DNI +
-                ", edad=" + edad +
+        return "\nUsuario:" +
+                "\nNombre:" + nombre +
+                "\nApellido:" + apellido +
+                "\nDNI:" + DNI +
+                "\nEdad:" + edad +
                 '}';
     }
 }

@@ -1,0 +1,33 @@
+[
+  {
+    "wifi": true,
+    "tarifa": 6000,
+    "categoria": "Gold",
+    "id": "00",
+    "capacidadCombustible": 20,
+    "costoKm": 300.0,
+    "capacidadMax": 10,
+    "velocidadMax": 200,
+    "propulsion": "REACCION"
+  },
+  {
+    "tarifa": 4000,
+    "categoria": "Silver",
+    "id": "00110",
+    "capacidadCombustible": 15,
+    "costoKm": 225.0,
+    "capacidadMax": 7,
+    "velocidadMax": 180,
+    "propulsion": "REACCION"
+  },
+  {
+    "tarifa": 3000,
+    "categoria": "Bronce",
+    "id": "1001",
+    "capacidadCombustible": 12,
+    "costoKm": 150.0,
+    "capacidadMax": 5,
+    "velocidadMax": 150,
+    "propulsion": "PISTON"
+  }
+]

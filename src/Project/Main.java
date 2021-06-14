@@ -19,19 +19,56 @@ public class Main {
     public static Scanner aux = new Scanner(System.in);
     public static void main(String[] args){
 
+        // CARGA DE ARCHIVO Y LISTAS
+        File archivoUsuarios = new File("Usuarios.txt");
+        List<Usuario> listaUsuarios = new ArrayList<>(10);
+
+        File archivoVuelos = new File ("Vuelos.txt");
+
+        File archivoAviones = new File ("Aviones.txt");
+
+        List<Avion> avionList = new ArrayList<>();
+        avionList.add(new Gold("Gold",20,300,10,200,Propulsion.REACCION,true));
+        avionList.add(new Silver("Silver",15,225,7,180,Propulsion.REACCION));
+        avionList.add(new Bronce("Bronce",12,150,5,150,Propulsion.PISTON));
+
+        System.out.println(avionList);
+
+        BufferedWriter writer = null;
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        if(archivoAviones.exists()){
+            try{
+                writer = new BufferedWriter(new FileWriter(new File("Aviones.txt")));
+                gson.toJson(avionList,avionList.getClass(),writer);
+            } catch (IOException e){
+                e.getMessage();
+            }catch (Exception e){
+                e.getMessage();
+            } finally {
+                if(writer != null){
+                    try {
+                        writer.close();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }
+
+        Usuario usuario = new Usuario("Fede","Tacchini",38283232,23);
+        Vuelo vuelo = new Vuelo();
+        vuelo.reservarVuelo(archivoVuelos,usuario);
+        System.out.println(vuelo);
+        //COMIENZO
+
         int opcion;
         boolean salir = false;
         System.out.println("AERO-TAXI");
         System.out.println("Bienvenido");
 
-        File archivoUsuarios = new File("Usuarios.txt");
-        List<Usuario> listaUsuarios = new ArrayList<>(10);
-
-        File archivoVuelos = new File ("Vuelos.txt");
-        Usuario usuario = new Usuario("Fede","Tacchini",38283232,23);
-        Vuelo vuelo = new Vuelo();
-        vuelo.reservarVuelo(archivoVuelos,usuario);
-        
         while(!salir){
             System.out.println("Ingrese la opcion deseada:\n");
 
@@ -123,14 +160,11 @@ public class Main {
 
     public static Usuario buscarUsuario (File archivo, String username) {
 
-
         List<Usuario> usuarioList;
         Usuario encontrado = null;
 
         if (archivo.exists()) {
             BufferedReader reader = null;
-
-
 
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
 

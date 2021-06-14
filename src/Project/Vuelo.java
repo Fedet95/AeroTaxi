@@ -1,15 +1,15 @@
 package Project;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import jdk.swing.interop.SwingInterOpUtils;
 
-import java.io.File;
+import java.io.*;
+import java.nio.Buffer;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Vuelo {
@@ -41,6 +41,7 @@ public class Vuelo {
     public Date pedirFecha(){
 
         Date fecha = null;
+
         do {
             System.out.println("Ingrese fecha que desea viajar");
             System.out.println("IMPORTANTE: Introduzca fecha de vuelo con formato dd/mm/aaaa");
@@ -51,7 +52,6 @@ public class Vuelo {
 
             try {
                 fecha = sdf.parse(fechaString);
-
             } catch (ParseException e) {
                 System.out.println("Fecha invalida");
             }
@@ -118,10 +118,12 @@ public class Vuelo {
     }
 
 
-    public Vuelo reservarVuelo (File archivo, Usuario usuario){
+    public Vuelo reservarVuelo (File archivo, Usuario usuario){ //TODAVIA NO COMPARA FECHAS Y AVIONES DISPONIBLES
+
+        Date fecha = pedirFecha();
         Scanner auxi = new Scanner(System.in);
         System.out.println("Ingrese NUMERO de ciudad de Origen");
-        Ciudades origen;
+        //Ciudades origen;
         int i = 1;
         for(var distancias : distancias.entrySet()){
             System.out.println(i + ". " + distancias.getKey());
@@ -129,16 +131,16 @@ public class Vuelo {
         }
         int opcionOrigen = auxi.nextInt();
         if(opcionOrigen == 1) {
-            origen = Ciudades.BSAS;
+            origen = Ciudades.MONTEVIDEO;
         }
         else{ if(opcionOrigen == 2) {
-            origen = Ciudades.CORDOBA;
+            origen = Ciudades.BSAS;
         }else{
-            origen = Ciudades.MONTEVIDEO;
+            origen = Ciudades.CORDOBA;
         }}
         System.out.println("Ciudad de origen: " +origen);
         System.out.println("Ingrese NUMERO de ciudad de Destino: ");
-        Ciudades destino;
+        //Ciudades destino = null;
         int x = 1;
         for(var distancias : distancias.get(origen).entrySet()){
             System.out.println(x + ". " + distancias.getKey());
@@ -147,11 +149,11 @@ public class Vuelo {
         int opcionDestino = auxi.nextInt();
         if(origen == Ciudades.BSAS){
             if(opcionDestino == 1)
-                destino = Ciudades.CORDOBA;
-            else if(opcionDestino == 2)
-                destino = Ciudades.SANTIAGO;
-            else{
                 destino = Ciudades.MONTEVIDEO;
+            else if(opcionDestino == 2)
+                destino = Ciudades.CORDOBA;
+            else{
+                destino = Ciudades.SANTIAGO;
             }
         }
 
@@ -167,17 +169,70 @@ public class Vuelo {
         }
 
 
+        //Seleccion de avion y tarifa
         System.out.println("Seleccione el tipo de avion");
+        BufferedReader reader = null;
+        List<Avion> avionList = new ArrayList<>();
+        //Avion avionElegido = null;
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            reader = new BufferedReader(new FileReader(new File("Aviones.txt")));
+            avionList = gson.fromJson(reader,(new TypeToken<List<Avion>>(){}.getType()));
 
-        Vuelo vuelo = new Vuelo();
+            int p = 1;
+            if(avionList !=null){
+                for(Avion avion :avionList){
+                    System.out.println(p + ". " + avion.getCategoria());
+                    p++;
+                }
+            }
+            int opcion = auxi.nextInt();
 
+            if (opcion<=3 && opcion>=1)
+                avion = avionList.get(opcion-1);
+            else {
+                System.out.println("Forro");
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }  finally {
+            if (reader != null) {
+                try {
+                    reader.close();
 
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        //(Cantidad de kms * Costo del km) + (cantidad de pasajeros * 3500) + (Tarifa del tipo de avión)
+        System.out.println("Ingrese cantidad de acompañantes");
+        acompañantes = auxi.nextInt();
+
+        int cantKm = distancias.get(origen).get(destino);
+        float costoKm = avion.getCostoKm();
+
+        costoVuelo = (cantKm * costoKm) + ((acompañantes+1) * 3500) + avion.getTarifa();
+
+        Vuelo vuelo = new Vuelo(this.fecha = fecha,origen,destino,this.clientUsername = usuario.getUsername(),acompañantes,avion,costoVuelo);
+        System.out.println("VUELO RESERVADO");
         return vuelo;
     }
 
     public Vuelo(){}
 
-
+    public Vuelo(Date fecha, Ciudades origen, Ciudades destino, String clientUsername, int acompañantes, Avion avion, float costoVuelo) {
+        this.fecha = fecha;
+        this.origen = origen;
+        this.destino = destino;
+        this.clientUsername = clientUsername;
+        this.acompañantes = acompañantes;
+        this.avion = avion;
+        this.costoVuelo = costoVuelo;
+    }
 
     public String getId() {
         return id;
@@ -244,8 +299,19 @@ public class Vuelo {
     }
 
 
-
-
+    @Override
+    public String toString() {
+        return "\nVuelo: {" +
+                "\nID Vuelo: " + id +
+                "\nFecha:" + fecha +
+                "\nOrigen:" + origen +
+                "\nDestino:" + destino +
+                "\nClientUsername:" + clientUsername +
+                "\nAcompañantes:" + acompañantes +
+                "\nAvion:" + avion +
+                "\nCostoVuelo:" + costoVuelo +
+                '}';
+    }
 }
 
 
