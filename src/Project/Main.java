@@ -10,16 +10,20 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args){
 
-        Gold avionGold = new Gold(5000,150,50,12000,Propulsion.PISTON,false);
-        Silver avionSilver = new Silver(4000F,180F,80,12000F,Propulsion.REACCION);
-        Bronce avionBronce = new Bronce(5000F,170,100,13000,Propulsion.PISTON);
+        Gold avionGold = new Gold("Gold",5000,150,50,12000,Propulsion.PISTON,false);
+        Silver avionSilver = new Silver("Silver",4000F,180F,80,12000F,Propulsion.REACCION);
+        Bronce avionBronce = new Bronce("Bronce",5000F,170,100,13000,Propulsion.PISTON);
+        List<Avion> listaAviones = new ArrayList<>();
+        listaAviones.add(avionGold);
+        listaAviones.add(avionSilver);
+        listaAviones.add(avionBronce);
+
         Usuario usuario1 = new Usuario("Federico","Tacchini",38829242,26);
         Usuario usuario2 = new Usuario("Samuel","Tocaimaza",32836243,34);
 
         List<Usuario>listaUsuario = new ArrayList<>();
         listaUsuario.add(usuario1);
         listaUsuario.add(usuario2);
-
 
 
 
@@ -43,20 +47,28 @@ public class Main {
 
 
         ///// CREAMOS UNA LISTA DE VUELOS: (PASAR A JSON Y ALMACENAR)///
-        Vuelo buenosAiresACordoba = new Vuelo("BsAs","Cordoba",usuario1,"2021-06-15",avionSilver);
-        Vuelo cordobaASantiago = new Vuelo("Cordoba","Santiago",usuario2,"2021-06-12",avionGold);
-        Vuelo lunes = new Vuelo("BsAs","Santiago",usuario2,"2021-06-07",avionSilver);
-        Vuelo martes = new Vuelo("BsAs","Montevideo",usuario2,"2021-06-08",avionGold);
-        Vuelo miercoles = new Vuelo("Montevideo","Santiago",usuario2,"2021-06-09",avionSilver);
+        Vuelo buenosAiresACordoba = new Vuelo("BsAs","Cordoba",usuario1,"2021-06-15",avionSilver,120000F);
+        Vuelo cordobaASantiago = new Vuelo("Cordoba","Santiago",usuario2,"2021-06-12",avionGold,150000F);
+        Vuelo lunes = new Vuelo("BsAs","Santiago",usuario2,"2021-06-14",avionBronce,100000F);
+        Vuelo martes = new Vuelo("BsAs","Montevideo",usuario2,"2021-06-14",avionGold,50000F);
+        Vuelo miercoles = new Vuelo("Montevideo","Santiago",usuario2,"2021-06-12",avionSilver,540000F);
         List<Vuelo> listaVuelos = new ArrayList<>();
         listaVuelos.add(buenosAiresACordoba);
         listaVuelos.add(cordobaASantiago);
         listaVuelos.add(lunes);
         listaVuelos.add(martes);
         listaVuelos.add(miercoles);
-        System.out.println(listaVuelos.toString());
+        //System.out.println(listaVuelos.toString());
+
+        Avion.muestroAvionesDisponibles(listaAviones,listaVuelos);
+        /// fecha de ejemplo: "2021-06-14"
 
 
+
+        //System.out.println(listaAviones.toString());
+
+
+/*
 
 
         System.out.println("Bienvenido al Menu - Aerotaxi");
@@ -107,6 +119,9 @@ public class Main {
                     if(rta == 3){
                         System.out.println("Utilizo Bronce");
                     }
+                    System.out.println("Total de dinero gastado en todos sus vuelos: ");
+                    float monto = Vuelo.montoTotalViajes(listaVuelos,usuarito);
+                    System.out.println(monto);
                 }
 
                 break;
@@ -116,6 +131,7 @@ public class Main {
                 break;
         }
         }
+*/
 
 
     }

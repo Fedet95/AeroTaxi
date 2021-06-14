@@ -4,8 +4,8 @@ public class Gold extends Avion implements Catering{
 
     private boolean wifi;
 
-    public Gold(float capacidadCombustible, float costoKm, int capacidadMax, float velocidadMax, Propulsion propulsion, boolean wifi) {
-        super(capacidadCombustible, costoKm, capacidadMax, velocidadMax, propulsion);
+    public Gold(String categoria, float capacidadCombustible, float costoKm, int capacidadMax, float velocidadMax, Propulsion propulsion, boolean wifi) {
+        super(categoria, capacidadCombustible, costoKm, capacidadMax, velocidadMax, propulsion);
         this.wifi = wifi;
     }
 
@@ -17,12 +17,6 @@ public class Gold extends Avion implements Catering{
         this.wifi = wifi;
     }
 
-    @Override
-    public String toString() {
-        return "Gold{" + super.toString() +
-                "wifi=" + wifi +
-                '}';
-    }
 
 
 }

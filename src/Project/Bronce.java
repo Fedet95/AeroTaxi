@@ -2,9 +2,7 @@ package Project;
 
 public class Bronce extends Avion{
 
-    public Bronce(float capacidadCombustible, float costoKm, int capacidadMax, float velocidadMax, Propulsion propulsion) {
-        super(capacidadCombustible, costoKm, capacidadMax, velocidadMax, propulsion);
+    public Bronce(String categoria, float capacidadCombustible, float costoKm, int capacidadMax, float velocidadMax, Propulsion propulsion) {
+        super(categoria, capacidadCombustible, costoKm, capacidadMax, velocidadMax, propulsion);
     }
-
-
 }

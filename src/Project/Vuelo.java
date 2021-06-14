@@ -11,17 +11,19 @@ public class Vuelo {
     private Usuario usuario;
     private String fecha;
     private Avion avion;
+    private float montoTotalReserva;
 
 
     public Vuelo() {
     }
 
-    public Vuelo(String origen, String destino, Usuario usuario, String fecha, Avion avion) {
+    public Vuelo(String origen, String destino, Usuario usuario, String fecha, Avion avion, float montoTotalReserva) {
         this.origen = origen;
         this.destino = destino;
         this.usuario = usuario;
         this.fecha = fecha;
         this.avion = avion;
+        this.montoTotalReserva = montoTotalReserva;
     }
 ///FUNCIÓN PARA CARGAR VUELOS: ///
 
@@ -69,7 +71,7 @@ public class Vuelo {
         System.out.println("El costo total de su viaje es de $:" + costoTotal);
 
         /// GENERO LA RESERVA DEL VUELO:
-        Vuelo nuevoVuelo = new Vuelo(origen,destino,usuarioFinal,fecha,avioncito);
+        Vuelo nuevoVuelo = new Vuelo(origen,destino,usuarioFinal,fecha,avioncito,costoTotal);
         listaVuelos.add(nuevoVuelo);
 
     }
@@ -98,6 +100,8 @@ public class Vuelo {
         }
     }
 
+
+
     public static void muestroVuelosPorFecha(List<Vuelo> listaVuelos){
         System.out.println("- Buscamos vuelos por fecha: ");
         System.out.println("Ingrese fecha: ");
@@ -108,6 +112,16 @@ public class Vuelo {
                 System.out.println(vuelito.toString());
             }
         }
+    }
+
+    public static float montoTotalViajes(List<Vuelo> listaVuelos,Usuario usuario){
+        float rta = 0F;
+            for (Vuelo vuelito:listaVuelos) {
+                if(vuelito.usuario.equals(usuario)){
+                    rta+= vuelito.montoTotalReserva;
+                }
+            }
+        return rta;
     }
 
     public static int categoriaMejorAvionUtilizado(List<Vuelo> listaVuelos,Usuario usuario){
@@ -178,21 +192,72 @@ public class Vuelo {
         return rta;
     }
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 
+    public String getOrigen() {
+        return origen;
+    }
 
+    public void setOrigen(String origen) {
+        this.origen = origen;
+    }
 
+    public String getDestino() {
+        return destino;
+    }
 
+    public void setDestino(String destino) {
+        this.destino = destino;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
+    }
+
+    public Avion getAvion() {
+        return avion;
+    }
+
+    public void setAvion(Avion avion) {
+        this.avion = avion;
+    }
+
+    public float getMontoTotalReserva() {
+        return montoTotalReserva;
+    }
+
+    public void setMontoTotalReserva(float montoTotalReserva) {
+        this.montoTotalReserva = montoTotalReserva;
+    }
 
     @Override
     public String toString() {
         return "Vuelo{" +
-                "id=" + id +
+                "id='" + id + '\'' +
                 ", origen='" + origen + '\'' +
                 ", destino='" + destino + '\'' +
                 ", usuario=" + usuario +
                 ", fecha='" + fecha + '\'' +
                 ", avion=" + avion +
+                ", montoTotalReserva=" + montoTotalReserva +
                 '}';
     }
 }

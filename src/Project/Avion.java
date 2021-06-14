@@ -8,6 +8,7 @@ import java.util.UUID;
 public class Avion implements Serializable {
 
     private String id = UUID.randomUUID().toString();
+    private String categoria;
     private float capacidadCombustible;
     private float costoKm;
     private int capacidadMax;
@@ -19,12 +20,34 @@ public class Avion implements Serializable {
 
 
 
-    public Avion(float capacidadCombustible, float costoKm, int capacidadMax, float velocidadMax, Propulsion propulsion) {
+    public Avion(String categoria,float capacidadCombustible, float costoKm, int capacidadMax, float velocidadMax, Propulsion propulsion) {
+        this.categoria = categoria;
         this.capacidadCombustible = capacidadCombustible;
         this.costoKm = costoKm;
         this.capacidadMax = capacidadMax;
         this.velocidadMax = velocidadMax;
         this.propulsion = propulsion;
+    }
+
+    public static void muestroAvionesDisponibles(List<Avion> listaAviones,List<Vuelo> listaVuelos){
+        String fecha = "2021-06-14";
+        for (Avion avioncito:listaAviones) {
+            boolean rta = avionDisponible(listaVuelos,fecha,avioncito);
+            if(rta == true){
+                System.out.println(avioncito.toString());
+            }
+        }
+    }
+
+    public static boolean avionDisponible(List<Vuelo> listaVuelos,String fecha, Avion avioncito){
+        for (Vuelo vuelito:listaVuelos) {
+            if(vuelito.getAvion().equals(avioncito)){
+                if(vuelito.getFecha().equals(fecha)){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public float getCapacidadCombustible() {
@@ -44,6 +67,22 @@ public class Avion implements Serializable {
             throw new Exception();
         }
         this.costoKm = costoKm;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     public int getCapacidadMax() {
@@ -70,20 +109,18 @@ public class Avion implements Serializable {
         this.propulsion = propulsion;
     }
 
-    
     @Override
     public String toString() {
         return "Avion{" +
-                "id=" + id +
-                "capacidadCombustible=" + capacidadCombustible +
+                "id='" + id + '\'' +
+                ", categoria='" + categoria + '\'' +
+                ", capacidadCombustible=" + capacidadCombustible +
                 ", costoKm=" + costoKm +
                 ", capacidadMax=" + capacidadMax +
                 ", velocidadMax=" + velocidadMax +
-                ", propulsion='" + propulsion + '\'' +
+                ", propulsion=" + propulsion +
                 '}';
     }
-
-
 }
 
 
