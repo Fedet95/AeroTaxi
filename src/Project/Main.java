@@ -158,7 +158,7 @@ public class Main {
         Scanner auxi = new Scanner(System.in);
         System.out.println("Ingrese fecha");
         String fechaprueba = auxi.nextLine();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd  HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         LocalDateTime fechahoravuelo = LocalDateTime.parse(fechaprueba, formatter);
 
         return fechahoravuelo;

@@ -3,7 +3,7 @@
     "wifi": true,
     "tarifa": 6000,
     "categoria": "Gold",
-    "id": "00",
+    "id": "010",
     "capacidadCombustible": 20,
     "costoKm": 300.0,
     "capacidadMax": 10,
@@ -13,7 +13,7 @@
   {
     "tarifa": 4000,
     "categoria": "Silver",
-    "id": "11010100",
+    "id": "1011",
     "capacidadCombustible": 15,
     "costoKm": 225.0,
     "capacidadMax": 7,
@@ -23,7 +23,7 @@
   {
     "tarifa": 3000,
     "categoria": "Bronce",
-    "id": "001",
+    "id": "10",
     "capacidadCombustible": 12,
     "costoKm": 150.0,
     "capacidadMax": 5,
