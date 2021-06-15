@@ -1,21 +1,40 @@
 [
   {
-    "id": "000",
-    "fecha": "2021-06-14 12:00",
-    "origen": "BSAS",
+    "id": "01000",
+    "fecha": "2021-06-15",
+    "origen": "CORDOBA",
     "destino": "MONTEVIDEO",
     "clientUsername": "FEDERICOTACCHINI",
     "acompañantes": 2,
     "avion": {
       "tarifa": 4000,
       "categoria": "Silver",
-      "id": "0001",
+      "id": "011",
       "capacidadCombustible": 15,
       "costoKm": 225.0,
       "capacidadMax": 7,
       "velocidadMax": 180,
       "propulsion": "REACCION"
     },
-    "costoVuelo": 228250.0
+    "costoVuelo": 282250.0
+  },
+  {
+    "id": "0110111",
+    "fecha": "2021-06-15",
+    "origen": "BSAS",
+    "destino": "CORDOBA",
+    "clientUsername": "FEDERICOTACCHINI",
+    "acompañantes": 2,
+    "avion": {
+      "tarifa": 4000,
+      "categoria": "Silver",
+      "id": "0000",
+      "capacidadCombustible": 15,
+      "costoKm": 225.0,
+      "capacidadMax": 7,
+      "velocidadMax": 180,
+      "propulsion": "REACCION"
+    },
+    "costoVuelo": 170875.0
   }
 ]
