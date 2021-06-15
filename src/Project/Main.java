@@ -17,7 +17,8 @@ public class Main {
     public static Scanner aux = new Scanner(System.in);
     public static void main(String[] args){
 
-
+        LocalDateTime prueba = pedirFecha();
+        System.out.println(prueba.toString().replace('T',' '));
 
 
         // CARGA DE ARCHIVO Y LISTAS
@@ -158,7 +159,7 @@ public class Main {
         System.out.println("Ingrese fecha");
         String fechaprueba = auxi.nextLine();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime fechahoravuelo = LocalDateTime.parse(fechaprueba,formatter);
+        LocalDateTime fechahoravuelo = LocalDateTime.parse(fechaprueba, formatter);
 
         return fechahoravuelo;
 
@@ -265,7 +266,7 @@ public class Main {
 
         float costoVuelo = (cantKm * costoKm) + ((acompañantes+1) * 3500) + avionElegido.getTarifa();
 
-        Vuelo vuelo = new Vuelo(fechaVuelo.toString(),origen,destino,usuario.getUsername(),acompañantes,avionElegido,costoVuelo);
+        Vuelo vuelo = new Vuelo(fechaVuelo.toString().replace('T',' '),origen,destino,usuario.getUsername(),acompañantes,avionElegido,costoVuelo);
         System.out.println("VUELO RESERVADO");
         agregarVueloFile(archivo,vuelo);
         return vuelo;
