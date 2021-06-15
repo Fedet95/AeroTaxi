@@ -15,10 +15,12 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static Project.Main.aux;
+
 public class Vuelo {
 
     private String id = UUID.randomUUID().toString().replaceAll("[^0-1]", "");
-    private LocalDateTime fecha;
+    private String fecha;
     private Ciudades origen;
     private Ciudades destino;
     private String clientUsername;
@@ -44,7 +46,7 @@ public class Vuelo {
 
     public Vuelo(){}
 
-    public Vuelo(LocalDateTime fecha, Ciudades origen, Ciudades destino, String clientUsername, int acompañantes, Avion avion, float costoVuelo) {
+    public Vuelo(String fecha, Ciudades origen, Ciudades destino, String clientUsername, int acompañantes, Avion avion, float costoVuelo) {
         this.fecha = fecha;
         this.origen = origen;
         this.destino = destino;
@@ -62,11 +64,11 @@ public class Vuelo {
         this.id = id;
     }
 
-    public LocalDateTime getFecha() {
+    public String getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDateTime fecha) {
+    public void setFecha(String fecha) {
         this.fecha = fecha;
     }
 
@@ -179,7 +181,6 @@ public class Vuelo {
 
         return destino;
     }
-
 
     @Override
     public String toString() {

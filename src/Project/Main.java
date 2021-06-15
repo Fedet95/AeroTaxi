@@ -7,12 +7,9 @@ import jdk.swing.interop.SwingInterOpUtils;
 
 import java.io.*;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -20,9 +17,9 @@ public class Main {
     public static Scanner aux = new Scanner(System.in);
     public static void main(String[] args){
 
-        /*LocalDateTime prueba = pedirFecha();
 
-        System.out.println(prueba);*/
+
+
         // CARGA DE ARCHIVO Y LISTAS
         File archivoUsuarios = new File("Usuarios.txt");
         List<Usuario> listaUsuarios = new ArrayList<>(10);
@@ -131,11 +128,20 @@ public class Main {
             switch(opcion) {
                 case 1:
                     System.out.println("Reservar un vuelo");
-                    Vuelo nuevoVuelo = new Vuelo();
                     reservarVuelo(archivo,usuario);
                     break;
                 case 2:
                     System.out.println("Cancelar un vuelo");
+                    System.out.println("Ingrese Fecha y Horario de vuelo: yyyy/MM/dd HH:mm");
+                    Scanner buscadorVuelo = new Scanner(System.in);
+                    String fechaVuelo = buscadorVuelo.nextLine();
+                    Vuelo vueloBuscado = null;
+                    vueloBuscado = buscarVuelo(archivo,fechaVuelo,usuario);
+                    if(vueloBuscado == null)
+                        System.out.println("No se registra ningun vuelo con la fecha mencionada");
+                    else
+                        System.out.println("Vuelo encontrado");
+                    System.out.println(vueloBuscado);
                     break;
                 case 3:
                     System.out.println("Saliendo...");
@@ -148,13 +154,11 @@ public class Main {
     }
 
     public static LocalDateTime pedirFecha(){
-
-        System.out.println("Ingrese fecha y hora de vuelo: dd-MM-yyyy HH:mm");
-        aux.reset();
-        String fechaHora = aux.nextLine();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-        LocalDateTime fechahoravuelo = LocalDateTime.parse(fechaHora,formatter);
-
+        Scanner auxi = new Scanner(System.in);
+        System.out.println("Ingrese fecha");
+        String fechaprueba = auxi.nextLine();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime fechahoravuelo = LocalDateTime.parse(fechaprueba,formatter);
 
         return fechahoravuelo;
 
@@ -163,7 +167,7 @@ public class Main {
     public static Vuelo reservarVuelo (File archivo, Usuario usuario){ //TODAVIA NO COMPARA FECHAS Y AVIONES DISPONIBLES
 
         LocalDateTime fechaVuelo = pedirFecha();
-        Scanner auxi = new Scanner(System.in);
+
         System.out.println("Ingrese NUMERO de ciudad de Origen");
         Ciudades origen;
         Vuelo vueloaux = new Vuelo();
@@ -173,7 +177,7 @@ public class Main {
             System.out.println(i + ". " + distancias.getKey());
             i++;
         }
-        int opcionOrigen = auxi.nextInt();
+        int opcionOrigen = aux.nextInt();
         if(opcionOrigen == 1) {
             origen = Ciudades.MONTEVIDEO;
         }
@@ -190,7 +194,7 @@ public class Main {
             System.out.println(x + ". " + distancias.getKey());
             x++;
         }
-        int opcionDestino = auxi.nextInt();
+        int opcionDestino = aux.nextInt();
         if(origen == Ciudades.BSAS){
             if(opcionDestino == 1)
                 destino = Ciudades.MONTEVIDEO;
@@ -230,7 +234,7 @@ public class Main {
                     p++;
                 }
             }
-            int opcion = auxi.nextInt();
+            int opcion = aux.nextInt();
 
             if (opcion<=3 && opcion>=1)
                 avionElegido = avionList.get(opcion-1);
@@ -254,18 +258,66 @@ public class Main {
 
         //(Cantidad de kms * Costo del km) + (cantidad de pasajeros * 3500) + (Tarifa del tipo de avión)
         System.out.println("Ingrese cantidad de acompañantes");
-        int acompañantes = auxi.nextInt();
+        int acompañantes = aux.nextInt();
 
         int cantKm = vueloaux.getDistancias().get(origen).get(destino);
         float costoKm = avionElegido.getCostoKm();
 
         float costoVuelo = (cantKm * costoKm) + ((acompañantes+1) * 3500) + avionElegido.getTarifa();
 
-        Vuelo vuelo = new Vuelo(fechaVuelo,origen,destino,usuario.getUsername(),acompañantes,avionElegido,costoVuelo);
+        Vuelo vuelo = new Vuelo(fechaVuelo.toString(),origen,destino,usuario.getUsername(),acompañantes,avionElegido,costoVuelo);
         System.out.println("VUELO RESERVADO");
         agregarVueloFile(archivo,vuelo);
         return vuelo;
     }
+
+    public static Vuelo buscarVuelo (File archivo, String fechaBuscada,Usuario usuario){
+
+        List<Vuelo> vueloList;
+        Vuelo encontrado = null;
+
+        if(archivo.exists()){
+            BufferedReader reader = null;
+
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+            try{
+                reader = new BufferedReader(new FileReader(new File("Vuelos.txt")));
+                vueloList = gson.fromJson(reader,(new TypeToken<List<Vuelo>>() {}.getType()));
+
+                if(vueloList == null){
+                    System.out.println("No hay vuelos registrados");
+                }
+                else{
+                    for(Vuelo vuelos : vueloList){
+                        String fecha = vuelos.getFecha();
+                        if(vuelos.getFecha().compareTo(fechaBuscada)==0){
+                            if(vuelos.getClientUsername().compareTo(usuario.getUsername())==0)
+                                encontrado = vuelos;
+                            else{
+                                System.out.println("El vuelo programado para su fecha solicitada no coincide con su Usuario");
+                            }
+                        }
+
+                    }
+                }
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            } finally {
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        return encontrado;
+    }
+
 
     public static void agregarVueloFile (File archivo, Vuelo vuelo){ //retorno?
 
