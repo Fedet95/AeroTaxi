@@ -1,15 +1,19 @@
 package Project;
 
-import java.rmi.server.RemoteServer;
-import java.sql.SQLOutput;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.*;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDate;
-import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args){
 
+
+        ////AVIONES ///
         Gold avionGold = new Gold("Gold",5000,150,50,12000,Propulsion.PISTON,false);
         Silver avionSilver = new Silver("Silver",4000F,180F,80,12000F,Propulsion.REACCION);
         Bronce avionBronce = new Bronce("Bronce",5000F,170,100,13000,Propulsion.PISTON);
@@ -18,6 +22,7 @@ public class Main {
         listaAviones.add(avionSilver);
         listaAviones.add(avionBronce);
 
+        /////USUARIOS ////
         Usuario usuario1 = new Usuario("Federico","Tacchini",38829242,26);
         Usuario usuario2 = new Usuario("Samuel","Tocaimaza",32836243,34);
 
@@ -26,10 +31,7 @@ public class Main {
         listaUsuario.add(usuario2);
 
 
-
-
-        /////PRUEBAS DE RUTAS AERES ////
-
+        ////RUTAS AEREAS////
         Ruta bsasCordoba = new Ruta("BsAs Cordoba",695);
         Ruta bsasSantiago = new Ruta("BsAs Santiago",1400);
         Ruta bsasMontevideo = new Ruta("BsAs Montevideo",950);
@@ -46,11 +48,10 @@ public class Main {
         listaRutasAereas.add(montevideoSantiago);
 
 
-        ///// CREAMOS UNA LISTA DE VUELOS: (PASAR A JSON Y ALMACENAR)///
         Vuelo buenosAiresACordoba = new Vuelo("BsAs","Cordoba",usuario1,"2021-06-15",avionSilver,120000F);
         Vuelo cordobaASantiago = new Vuelo("Cordoba","Santiago",usuario2,"2021-06-12",avionGold,150000F);
         Vuelo lunes = new Vuelo("BsAs","Santiago",usuario2,"2021-06-14",avionBronce,100000F);
-        Vuelo martes = new Vuelo("BsAs","Montevideo",usuario2,"2021-06-14",avionGold,50000F);
+        Vuelo martes = new Vuelo("BsAs","Montevideo",usuario2,"2021-06-17",avionGold,50000F);
         Vuelo miercoles = new Vuelo("Montevideo","Santiago",usuario2,"2021-06-12",avionSilver,540000F);
         List<Vuelo> listaVuelos = new ArrayList<>();
         listaVuelos.add(buenosAiresACordoba);
@@ -58,10 +59,16 @@ public class Main {
         listaVuelos.add(lunes);
         listaVuelos.add(martes);
         listaVuelos.add(miercoles);
-        //System.out.println(listaVuelos.toString());
 
-        Avion.muestroAvionesDisponibles(listaAviones,listaVuelos);
-        /// fecha de ejemplo: "2021-06-14"
+        //Avion.muestroAvionesDisponibles(listaAviones,listaVuelos);
+        ///fecha de ejemplo: "2021-06-14"
+
+        float tarifa = Avion.tarifaPorServicio(listaAviones,listaVuelos);
+        System.out.println("La tarifa es: "+tarifa);
+
+
+
+
 
 
 
@@ -135,4 +142,68 @@ public class Main {
 
 
     }
+    /// función que guarda en un JSON una lista de aviones:
+
+    /*public static void crearJSONAviones(List<Avion> listaAviones){
+        Gson gson1 = new GsonBuilder().setPrettyPrinting().create();
+
+        BufferedWriter fSalidaDatos = null;
+        try{
+            fSalidaDatos = new BufferedWriter(new FileWriter(new File("aviones.json")));
+
+
+            String json = gson1.toJson(listaAviones,listaAviones.getClass());
+
+            fSalidaDatos.write(json);
+
+
+        }catch (IOException e){
+            System.out.println(e.getMessage());
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }finally {
+            if(fSalidaDatos!=null){
+                try{
+                    fSalidaDatos.close();
+                }catch (IOException e){
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+    }
+
+    public static void cargarJSONAviones(){
+
+        if(!new File("aviones.json").exists()){
+            return;
+        }
+
+        BufferedReader bR = null;
+
+        try {
+
+            bR = new BufferedReader(new FileReader(new File("aviones.json")));
+
+            Gson gson = new Gson();
+            Type type = new TypeToken<List<Avion[]>>(){}.getType();
+            List<Avion[]> listaAviones = gson.fromJson(bR, type);
+
+
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+        }finally {
+            if(bR!=null){
+                try{
+                    bR.close();
+                }catch (IOException e){
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+
+
+    }*/
+
+
+
 }

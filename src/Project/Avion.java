@@ -3,6 +3,7 @@ package Project;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.UUID;
 
 public class Avion implements Serializable {
@@ -29,12 +30,32 @@ public class Avion implements Serializable {
         this.propulsion = propulsion;
     }
 
+    public static float tarifaPorServicio(List<Avion> listaAviones,List<Vuelo> listaVuelos){
+        float tarifaServicio=0F;
+        System.out.println("Estos son los aviones disponibles para la fecha ingresada: ");
+        Avion.muestroAvionesDisponibles(listaAviones,listaVuelos);
+        Scanner entrada = new Scanner(System.in);
+        System.out.println("Ingrese el servicio deseado: ");
+        String servicioDeseado = entrada.nextLine();
+
+        if(servicioDeseado.equals("Gold")){
+            tarifaServicio = 6000F;
+        }if(servicioDeseado.equals("Bronce")){
+            tarifaServicio = 3000F;
+        }if(servicioDeseado.equals("Silver")){
+            tarifaServicio = 4000F;
+        }
+        return tarifaServicio;
+    }
+
+
+
     public static void muestroAvionesDisponibles(List<Avion> listaAviones,List<Vuelo> listaVuelos){
         String fecha = "2021-06-14";
         for (Avion avioncito:listaAviones) {
             boolean rta = avionDisponible(listaVuelos,fecha,avioncito);
             if(rta == true){
-                System.out.println(avioncito.toString());
+                System.out.println(avioncito.getCategoria().toString());
             }
         }
     }
