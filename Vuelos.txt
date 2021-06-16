@@ -7,9 +7,9 @@
     "clientUsername": "FEDERICOTACCHINI",
     "acompañantes": 2,
     "avion": {
+      "id": "011",
       "tarifa": 4000,
       "categoria": "Silver",
-      "id": "011",
       "capacidadCombustible": 15,
       "costoKm": 225.0,
       "capacidadMax": 7,
@@ -26,9 +26,9 @@
     "clientUsername": "FEDERICOTACCHINI",
     "acompañantes": 2,
     "avion": {
+      "id": "0000",
       "tarifa": 4000,
       "categoria": "Silver",
-      "id": "0000",
       "capacidadCombustible": 15,
       "costoKm": 225.0,
       "capacidadMax": 7,
@@ -36,5 +36,43 @@
       "propulsion": "REACCION"
     },
     "costoVuelo": 170875.0
+  },
+  {
+    "id": "10110",
+    "fecha": "2021-05-16",
+    "origen": "MONTEVIDEO",
+    "destino": "SANTIAGO",
+    "clientUsername": "FEDERICOTACCHINI",
+    "acompañantes": 2,
+    "avion": {
+      "id": "0001",
+      "tarifa": 3000,
+      "categoria": "Bronce",
+      "capacidadCombustible": 12,
+      "costoKm": 150.0,
+      "capacidadMax": 5,
+      "velocidadMax": 150,
+      "propulsion": "PISTON"
+    },
+    "costoVuelo": 328500.0
+  },
+  {
+    "id": "0001",
+    "fecha": "2021-05-16",
+    "origen": "BSAS",
+    "destino": "MONTEVIDEO",
+    "clientUsername": "FEDERICOTACCHINI",
+    "acompañantes": 2,
+    "avion": {
+      "id": "11",
+      "tarifa": 4000,
+      "categoria": "Silver",
+      "capacidadCombustible": 15,
+      "costoKm": 225.0,
+      "capacidadMax": 7,
+      "velocidadMax": 180,
+      "propulsion": "REACCION"
+    },
+    "costoVuelo": 228250.0
   }
 ]
