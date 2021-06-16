@@ -109,6 +109,7 @@ public class Usuario {
                 "\nDNI: " + DNI +
                 "\nEdad: " + edad +
                 "\nTotal Gastado: $" + totalGastado +
+                "\nMejor Flota Utilizada: " + mejorFlotaUtilizada +
                 "\n-------------------------------";
     }
 }

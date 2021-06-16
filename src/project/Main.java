@@ -138,25 +138,27 @@ public class Main {
                     case 1:
                         System.out.println("Reservar un vuelo");
                         Vuelo vueloReserva = reservarVuelo(archivoVuelos, usuario);
-                        System.out.println("VUELO RESERVADO");
-                        System.out.println(vueloReserva);
-                        System.out.println("------------------------");
-                        System.out.println("¿Confirma la reserva?");
-                        System.out.println("Escriba 'SI' para confirmar");
-                        confirmacion = pedirString().toUpperCase(Locale.ROOT);
-                        if (confirmacion.equals("SI")) {
-                            usuario.setTotalGastado(usuario.getTotalGastado() + vueloReserva.getCostoVuelo());
-                            agregarVueloFile(archivoVuelos, vueloReserva);
-                            if (usuario.getMejorFlotaUtilizada() == null) ///Se cambia a una mejor flota utilizada en caso de ser necesario
-                                usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
-                            else if (usuario.getMejorFlotaUtilizada().equals("Bronce") && vueloReserva.getAvion().getCategoria().equals("Silver")
-                                    || vueloReserva.getAvion().getCategoria().equals("Gold")) {
-                                usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
-                            } else if (usuario.getMejorFlotaUtilizada().equals("Silver") && vueloReserva.getAvion().getCategoria().equals("Bronce")) {
-                                usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
-                            }
-                        } else
-                            System.out.println("Operacion cancelada. Regresando al menu");
+                        if (vueloReserva != null) {
+                            System.out.println("VUELO RESERVADO");
+                            System.out.println(vueloReserva);
+                            System.out.println("------------------------");
+                            System.out.println("¿Confirma la reserva?");
+                            System.out.println("Escriba 'SI' para confirmar");
+                            confirmacion = pedirString().toUpperCase(Locale.ROOT);
+                            if (confirmacion.equals("SI")) {
+                                usuario.setTotalGastado(usuario.getTotalGastado() + vueloReserva.getCostoVuelo());
+                                agregarVueloFile(archivoVuelos, vueloReserva);
+                                if (usuario.getMejorFlotaUtilizada() == null) ///Se cambia a una mejor flota utilizada en caso de ser necesario
+                                    usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
+                                else if (usuario.getMejorFlotaUtilizada().equals("Bronce") && vueloReserva.getAvion().getCategoria().equals("Silver")
+                                        || vueloReserva.getAvion().getCategoria().equals("Gold")) {
+                                    usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
+                                } else if (usuario.getMejorFlotaUtilizada().equals("Silver") && vueloReserva.getAvion().getCategoria().equals("Bronce")) {
+                                    usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
+                                }
+                            } else
+                                System.out.println("Operacion cancelada. Regresando al menu");
+                        }
                         break;
                     case 2:
                         System.out.println("Cancelar un vuelo");
@@ -383,6 +385,11 @@ public class Main {
 
         LocalDate fechaVuelo = confirmarFecha();
 
+        //Seleccion de avion y tarifa
+        Avion avionElegido = mostrarAvionesDisponibles(fechaVuelo.toString());
+        if (avionElegido == null)
+            return null;
+
         System.out.println("Ingrese NUMERO de ciudad de Origen");
         Ciudades origen;
         Vuelo vueloaux = new Vuelo();
@@ -438,8 +445,6 @@ public class Main {
         }
 
         System.out.println("Ciudad de Destino: " + destino);
-        //Seleccion de avion y tarifa
-        Avion avionElegido = mostrarAvionesDisponibles(fechaVuelo.toString());
 
 
         //(Cantidad de kms * Costo del km) + (cantidad de pasajeros * 3500) + (Tarifa del tipo de avión)
@@ -591,9 +596,9 @@ public class Main {
             List<Avion> avionList = gson.fromJson(avionReader, (new TypeToken<List<Avion>>() {
             }.getType()));
 
-            System.out.println("Seleccione el tipo de avion para la fecha " + fecha.replace('T', ' '));
 
             if (vuelosList == null) {
+                System.out.println("Seleccione el tipo de avion para la fecha " + fecha.replace('T', ' '));
                 int i = 1;
                 if (avionList != null) {
                     for (Avion avion : avionList) {
@@ -609,12 +614,17 @@ public class Main {
                     }
                 }
             } else {
-                if (avionList != null) {
-                    for (Vuelo vuelos : vuelosList) {
-                        if (vuelos.getFecha().compareTo(fecha.replace('T', ' ')) == 0) {
-                            avionList.removeIf(avion -> vuelos.getAvion().getCategoria().compareTo(avion.getCategoria()) == 0);
-                        }
+                int removidos = 0;
+                for (Vuelo vuelos : vuelosList) {
+                    if (vuelos.getFecha().compareTo(fecha.replace('T', ' ')) == 0) {
+                        avionList.removeIf(avion -> vuelos.getAvion().getCategoria().compareTo(avion.getCategoria()) == 0);
+                        removidos++;
                     }
+                }
+
+                if (removidos != 3) {
+                    System.out.println(avionList);
+                    System.out.println("Sleccione el tipo de avion para la fecha " + fecha.replace('T', ' '));
                     int i = 1;
                     for (Avion avion : avionList) {
                         System.out.println(i + ". " + avion.getCategoria());
@@ -627,7 +637,9 @@ public class Main {
                     else {
                         System.out.println("Opcion incorrecta");
                     }
-                }
+                } else
+                    System.out.println("Lo sentimos. Todos los vuelos están ocupados para esa fecha");
+
             }
 
         } catch (IOException e) {
