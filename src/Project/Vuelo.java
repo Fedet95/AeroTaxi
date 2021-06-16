@@ -1,32 +1,11 @@
 package Project;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import jdk.swing.interop.SwingInterOpUtils;
-
-import java.io.*;
-import java.nio.Buffer;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-
-import static Project.Main.aux;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.UUID;
 
 public class Vuelo {
-
-    private String id = UUID.randomUUID().toString().replaceAll("[^0-1]", "");
-    private String fecha;
-    private Ciudades origen;
-    private Ciudades destino;
-    private String clientUsername;
-    private int acompañantes;
-    private Avion avion;
-    private float costoVuelo;
 
     private transient final Map<Ciudades, Map<Ciudades, Integer>> distancias = new HashMap<>() {{
         put(Ciudades.BSAS, new HashMap<>() {{
@@ -43,8 +22,17 @@ public class Vuelo {
         }});
 
     }};
+    private String id = UUID.randomUUID().toString().replaceAll("[^0-1]", "");
+    private String fecha;
+    private Ciudades origen;
+    private Ciudades destino;
+    private String clientUsername;
+    private int acompañantes;
+    private Avion avion;
+    private float costoVuelo;
 
-    public Vuelo(){}
+    public Vuelo() {
+    }
 
     public Vuelo(String fecha, Ciudades origen, Ciudades destino, String clientUsername, int acompañantes, Avion avion, float costoVuelo) {
         this.fecha = fecha;
@@ -125,57 +113,58 @@ public class Vuelo {
     }
 
 
-    public Ciudades pedirOrigen (){
+    public Ciudades pedirOrigen() {
         Scanner auxi = new Scanner(System.in);
         System.out.println("Ingrese NUMERO de ciudad de Origen");
         Ciudades origen = null;
         int i = 1;
-        for(var distancias : distancias.entrySet()){
+        for (var distancias : distancias.entrySet()) {
             System.out.println(i + ". " + distancias.getKey());
             i++;
         }
         int opcionOrigen = auxi.nextInt();
-        if(opcionOrigen == 1) {
+        if (opcionOrigen == 1) {
             origen = Ciudades.BSAS;
+        } else {
+            if (opcionOrigen == 2) {
+                origen = Ciudades.CORDOBA;
+            } else {
+                origen = Ciudades.MONTEVIDEO;
+            }
         }
-        else{ if(opcionOrigen == 2) {
-            origen = Ciudades.CORDOBA;
-        }else{
-            origen = Ciudades.MONTEVIDEO;
-        }}
-        System.out.println("Ciudad de origen: " +origen);
+        System.out.println("Ciudad de origen: " + origen);
 
         return origen;
     }
 
-    public Ciudades pedirDestino(Ciudades origen){
+    public Ciudades pedirDestino(Ciudades origen) {
         Scanner auxi = new Scanner(System.in);
         System.out.println("Ingrese NUMERO de ciudad de Destino: ");
         Ciudades destino = null;
         int x = 1;
-        for(var distancias : distancias.get(origen).entrySet()){
+        for (var distancias : distancias.get(origen).entrySet()) {
             System.out.println(x + ". " + distancias.getKey());
             x++;
         }
         int opcionDestino = auxi.nextInt();
-        if(origen == Ciudades.BSAS){
-            if(opcionDestino == 1)
+        if (origen == Ciudades.BSAS) {
+            if (opcionDestino == 1)
                 destino = Ciudades.CORDOBA;
-            else if(opcionDestino == 2)
+            else if (opcionDestino == 2)
                 destino = Ciudades.SANTIAGO;
-            else{
+            else {
                 destino = Ciudades.MONTEVIDEO;
             }
         }
 
-        if(origen == Ciudades.CORDOBA) {
+        if (origen == Ciudades.CORDOBA) {
             if (opcionDestino == 1)
                 destino = Ciudades.MONTEVIDEO;
             else
                 destino = Ciudades.SANTIAGO;
         }
 
-        if(origen == Ciudades.MONTEVIDEO){
+        if (origen == Ciudades.MONTEVIDEO) {
             destino = Ciudades.SANTIAGO;
         }
 

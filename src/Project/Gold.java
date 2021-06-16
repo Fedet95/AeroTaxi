@@ -1,6 +1,6 @@
 package Project;
 
-public class Gold extends Avion implements Catering{
+public class Gold extends Avion implements Catering {
 
     private boolean wifi;
 

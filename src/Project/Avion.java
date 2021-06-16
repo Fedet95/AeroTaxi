@@ -1,14 +1,13 @@
 package Project;
 
 import java.io.Serializable;
-import java.lang.reflect.Type;
 import java.util.UUID;
 
 public class Avion implements Serializable {
 
+    private final String id = UUID.randomUUID().toString().replaceAll("[^0-1]", "");
     private int tarifa;
     private String categoria;
-    private final String id = UUID.randomUUID().toString().replaceAll("[^0-1]", "");
     private int capacidadCombustible;
     private float costoKm;
     private int capacidadMax;
@@ -36,12 +35,12 @@ public class Avion implements Serializable {
         this.tarifa = tarifa;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
     public String getCategoria() {
         return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
     }
 
     public int getCapacidadCombustible() {
@@ -57,7 +56,7 @@ public class Avion implements Serializable {
     }
 
     public void setCostoKm(float costoKm) throws Exception {
-        if(costoKm < 150 || costoKm >300) {
+        if (costoKm < 150 || costoKm > 300) {
             throw new Exception();
         }
         this.costoKm = costoKm;

@@ -2,8 +2,6 @@ package Project;
 
 import java.util.Scanner;
 
-import static Project.Main.aux;
-
 public class Usuario {
 
     private String nombre;
@@ -74,16 +72,15 @@ public class Usuario {
         this.pw = pw;
     }
 
-    public String crearContraseña(){
+    public String crearContraseña() {
         System.out.println("Ingrese una contraseña de 5 caracteres: ");
         String contraseña = new Scanner(System.in).next();
-        if(contraseña.length()>5) {
-            System.out.println("Se exedió el maximo. Reintente");
+        if (contraseña.length() == 5) {
+            System.out.println("La contraseña no es de 5 caracteres. Reintente");
             contraseña = new Scanner(System.in).next();
         }
         return contraseña;
     }
-
 
 
     @Override

@@ -1,6 +1,6 @@
 package Project;
 
-public class Bronce extends Avion{
+public class Bronce extends Avion {
 
     public Bronce(String categoria, int capacidadCombustible, float costoKm, int capacidadMax, int velocidadMax, Propulsion propulsion) {
         super(categoria, capacidadCombustible, costoKm, capacidadMax, velocidadMax, propulsion);
