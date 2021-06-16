@@ -154,10 +154,9 @@ public class Main {
                                 agregarVueloFile(archivoVuelos, vueloReserva);
                                 if (usuario.getMejorFlotaUtilizada() == null) ///Se cambia a una mejor flota utilizada en caso de ser necesario
                                     usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
-                                else if (usuario.getMejorFlotaUtilizada().equals("Bronce") && vueloReserva.getAvion().getCategoria().equals("Silver")
-                                        || vueloReserva.getAvion().getCategoria().equals("Gold")) {
+                                else if ((usuario.getMejorFlotaUtilizada().equals("Bronce") && vueloReserva.getAvion().getCategoria().equals("Silver")) ||(usuario.getMejorFlotaUtilizada().equals("Bronce") &&vueloReserva.getAvion().getCategoria().equals("Gold"))) {
                                     usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
-                                } else if (usuario.getMejorFlotaUtilizada().equals("Silver") && vueloReserva.getAvion().getCategoria().equals("Bronce")) {
+                                } else if (usuario.getMejorFlotaUtilizada().equals("Silver") && vueloReserva.getAvion().getCategoria().equals("Gold")) {
                                     usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
                                 }
                             } else
