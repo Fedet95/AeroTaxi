@@ -268,7 +268,7 @@ public class Main {
         Usuario encontrado = null;
 
         if (archivo.exists()) {
-            List<Usuario> usuarioList = null;
+            List<Usuario> usuarioList;
 
             try (BufferedReader reader = new BufferedReader(new FileReader("Usuarios.txt"))) {
                 usuarioList = gson.fromJson(reader, (new TypeToken<List<Usuario>>() {
@@ -388,7 +388,7 @@ public class Main {
                 int i = 1;
                 if (avionList != null) {
                     for (Avion avion : avionList) {
-                        System.out.println(i + ". " + avion.getCategoria());
+                        System.out.println(i + ". " + avion.getCategoria() + ". Tarifa: $" + avion.getTarifa() + ". Costo Km/h: $" + avion.getCostoKm());
                         i++;
                     }
                     int opcion = pedirInt("Debe ingresar un numero");
@@ -409,11 +409,10 @@ public class Main {
                 }
 
                 if (removidos != 3) {
-                    System.out.println(avionList);
                     System.out.println("Sleccione el tipo de avion para la fecha " + fecha.replace('T', ' '));
                     int i = 1;
                     for (Avion avion : avionList) {
-                        System.out.println(i + ". " + avion.getCategoria());
+                        System.out.println(i + ". " + avion.getCategoria() + ". Tarifa: $" + avion.getTarifa() + ". Costo Km/h: $" + avion.getCostoKm());
                         i++;
                     }
                     int opcion = pedirInt("Debe ingresar un numero");
