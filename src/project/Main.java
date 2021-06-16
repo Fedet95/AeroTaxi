@@ -209,7 +209,8 @@ public class Main {
 
                 System.out.println("1. Ver listado de Clientes");
                 System.out.println("2. Ver vuelos programados en una fecha indicada");
-                System.out.println("3. Salir");
+                System.out.println("3. Ver listado de Aviones");
+                System.out.println("4. Salir");
                 System.out.println("Escriba una de las opciones: ");
                 opcion = pedirInt();
 
@@ -224,11 +225,15 @@ public class Main {
                         mostrarVuelosPorFecha(archivoVuelos, fecha);
                         break;
                     case 3:
+                        System.out.println("Aviones disponibles para reservas");
+                        mostrarAvionesFile();
+                        break;
+                    case 4:
                         System.out.println("Cerrando Aero-Taxi");
                         salir = true;
                         break;
                     default:
-                        System.out.println("Solo números entre 1 y 3");
+                        System.out.println("Solo números entre 1 y 4");
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Debe ingresar un numero entre 1 y 3");
@@ -695,6 +700,24 @@ public class Main {
                 System.out.println(e.getMessage());
             }
         }
+    }
+
+    public static void mostrarAvionesFile(){
+
+            List<Avion> avionList = null;
+            try (BufferedReader reader = new BufferedReader(new FileReader(new File("Aviones.txt")))) {
+                avionList = gson.fromJson(reader, (new TypeToken<List<Avion>>() {}.getType()));
+
+                if (avionList != null) {
+                    for (Avion aviones   : avionList) {
+                        System.out.println(aviones);
+                    }
+                } else
+                    System.out.println("No hay aviones registrados en el Sistema");
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
     }
 
     ///endregion
