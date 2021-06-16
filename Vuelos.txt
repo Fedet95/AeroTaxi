@@ -1,43 +1,5 @@
 [
   {
-    "id": "00",
-    "fecha": "2021-08-20",
-    "origen": "BSAS",
-    "destino": "CORDOBA",
-    "clientUsername": "FEDERICOTACCHINI",
-    "acompañantes": 2,
-    "avion": {
-      "id": "010",
-      "tarifa": 3000,
-      "categoria": "Bronce",
-      "capacidadCombustible": 12,
-      "costoKm": 150.0,
-      "capacidadMax": 5,
-      "velocidadMax": 150,
-      "propulsion": "PISTON"
-    },
-    "costoVuelo": 117750.0
-  },
-  {
-    "id": "1111",
-    "fecha": "2021-08-22",
-    "origen": "BSAS",
-    "destino": "CORDOBA",
-    "clientUsername": "ASDASD",
-    "acompañantes": 2,
-    "avion": {
-      "id": "10001000",
-      "tarifa": 6000,
-      "categoria": "Gold",
-      "capacidadCombustible": 20,
-      "costoKm": 300.0,
-      "capacidadMax": 10,
-      "velocidadMax": 200,
-      "propulsion": "REACCION"
-    },
-    "costoVuelo": 225000.0
-  },
-  {
     "id": "1001",
     "fecha": "2021-08-22",
     "origen": "BSAS",

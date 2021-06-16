@@ -31,6 +31,7 @@ public class Vuelo {
     private Avion avion;
     private float costoVuelo;
 
+    ///region Constructores
     public Vuelo() {
     }
 
@@ -43,7 +44,9 @@ public class Vuelo {
         this.avion = avion;
         this.costoVuelo = costoVuelo;
     }
+    ///endregion
 
+    ///region Getters & Setters
     public String getId() {
         return id;
     }
@@ -169,6 +172,7 @@ public class Vuelo {
 
         return destino;
     }
+    ///endregion
 
     @Override
     public String toString() {

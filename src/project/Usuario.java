@@ -13,6 +13,7 @@ public class Usuario {
     private float totalGastado;
     private String mejorFlotaUtilizada;
 
+    ///region Constructors
     public Usuario() {
 
     }
@@ -25,7 +26,9 @@ public class Usuario {
         this.username = (nombre + apellido).toUpperCase();
         this.pw = crearContraseña();
     }
+    ///endregion
 
+    ///region Getters & Setters
     public String getNombre() {
         return nombre;
     }
@@ -89,6 +92,8 @@ public class Usuario {
     public void setMejorFlotaUtilizada(String mejorFlotaUtilizada) {
         this.mejorFlotaUtilizada = mejorFlotaUtilizada;
     }
+
+    ///endregion
 
     public String crearContraseña() {
         System.out.println("Ingrese una contraseña de 5 caracteres: ");
