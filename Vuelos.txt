@@ -1,51 +1,13 @@
 [
   {
-    "id": "01000",
-    "fecha": "2021-06-15",
-    "origen": "CORDOBA",
-    "destino": "MONTEVIDEO",
-    "clientUsername": "FEDERICOTACCHINI",
-    "acompañantes": 2,
-    "avion": {
-      "id": "011",
-      "tarifa": 4000,
-      "categoria": "Silver",
-      "capacidadCombustible": 15,
-      "costoKm": 225.0,
-      "capacidadMax": 7,
-      "velocidadMax": 180,
-      "propulsion": "REACCION"
-    },
-    "costoVuelo": 282250.0
-  },
-  {
-    "id": "0110111",
-    "fecha": "2021-06-15",
+    "id": "00",
+    "fecha": "2021-08-20",
     "origen": "BSAS",
     "destino": "CORDOBA",
     "clientUsername": "FEDERICOTACCHINI",
     "acompañantes": 2,
     "avion": {
-      "id": "0000",
-      "tarifa": 4000,
-      "categoria": "Silver",
-      "capacidadCombustible": 15,
-      "costoKm": 225.0,
-      "capacidadMax": 7,
-      "velocidadMax": 180,
-      "propulsion": "REACCION"
-    },
-    "costoVuelo": 170875.0
-  },
-  {
-    "id": "10110",
-    "fecha": "2021-05-16",
-    "origen": "MONTEVIDEO",
-    "destino": "SANTIAGO",
-    "clientUsername": "FEDERICOTACCHINI",
-    "acompañantes": 2,
-    "avion": {
-      "id": "0001",
+      "id": "010",
       "tarifa": 3000,
       "categoria": "Bronce",
       "capacidadCombustible": 12,
@@ -54,25 +16,25 @@
       "velocidadMax": 150,
       "propulsion": "PISTON"
     },
-    "costoVuelo": 328500.0
+    "costoVuelo": 117750.0
   },
   {
-    "id": "0001",
-    "fecha": "2021-05-16",
+    "id": "1111",
+    "fecha": "2021-08-22",
     "origen": "BSAS",
-    "destino": "MONTEVIDEO",
-    "clientUsername": "FEDERICOTACCHINI",
+    "destino": "CORDOBA",
+    "clientUsername": "ASDASD",
     "acompañantes": 2,
     "avion": {
-      "id": "11",
-      "tarifa": 4000,
-      "categoria": "Silver",
-      "capacidadCombustible": 15,
-      "costoKm": 225.0,
-      "capacidadMax": 7,
-      "velocidadMax": 180,
+      "id": "10001000",
+      "tarifa": 6000,
+      "categoria": "Gold",
+      "capacidadCombustible": 20,
+      "costoKm": 300.0,
+      "capacidadMax": 10,
+      "velocidadMax": 200,
       "propulsion": "REACCION"
     },
-    "costoVuelo": 228250.0
+    "costoVuelo": 225000.0
   }
 ]

@@ -3,6 +3,7 @@ package project;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import jdk.swing.interop.SwingInterOpUtils;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -16,7 +17,7 @@ import static project.Utilidad.pedirInt;
 import static project.Utilidad.pedirString;
 
 public class Main {
-
+    //mostrarAvionesDisponibles REVISAR BUFFERS
     private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private static List<Avion> crearListaAvion() {
@@ -144,8 +145,8 @@ public class Main {
     public static LocalDate pedirFecha() {
         String fechaprueba = pedirString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate fechahoravuelo = LocalDate.parse(fechaprueba, formatter);
-        return fechahoravuelo;
+        LocalDate fechavuelo = LocalDate.parse(fechaprueba, formatter);
+        return fechavuelo;
     }
 
     public static LocalDate confirmarFecha() {
@@ -262,10 +263,8 @@ public class Main {
         boolean id = false;
         if (archivo.exists()) {
 
-
             try (BufferedReader reader = new BufferedReader(new FileReader("Vuelos.txt"))) {
-                vueloList = gson.fromJson(reader, (new TypeToken<List<Vuelo>>() {
-                }.getType()));
+                vueloList = gson.fromJson(reader, (new TypeToken<List<Vuelo>>() {}.getType()));
 
                 if (vueloList == null) {
                     System.out.println("No hay vuelos registrados");
@@ -282,12 +281,9 @@ public class Main {
                                     System.out.println("El vuelo ID " + idBuscado + " no puede ser cancelado debido a estar programado para el día de hoy");
                                 } else
                                     encontrado = vuelos;
-
                             } else
                                 System.out.println("El vuelo ID " + idBuscado + "no puede ser borrado por un usuario distinto a quien figura en la reserva");
-
                         }
-
                     }
                     if (id == false)
                         System.out.println("No existe un vuelo reservado bajo el ID " + idBuscado);
@@ -364,27 +360,26 @@ public class Main {
 
     public static void agregarVueloFile(File archivo, Vuelo vuelo) {
 
-
         if (archivo.exists()) {
+            List<Vuelo> vueloList = null;
+            try(BufferedReader reader = new BufferedReader(new FileReader(new File("Vuelos.txt")))) {
 
-            try(BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Vuelos.txt")));
-                BufferedReader reader = new BufferedReader(new FileReader(new File("Vuelos.txt")));) {
-
-
-                List<Vuelo> vueloList = gson.fromJson(reader, (new TypeToken<List<Vuelo>>() {
+                vueloList = gson.fromJson(reader, (new TypeToken<List<Vuelo>>() {
                 }.getType()));
 
                 if (vueloList == null) {
                     vueloList = new ArrayList<>();
-
                 }
 
                 vueloList.add(vuelo);
 
-                gson.toJson(vueloList, vueloList.getClass(), writer);
 
-            } catch (IOException e) {
+
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
+            }
+            try(BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Vuelos.txt")))){
+                gson.toJson(vueloList, vueloList.getClass(), writer);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -393,14 +388,11 @@ public class Main {
 
     public static void borrarVueloFile(File archivo, Vuelo vuelo) {
 
-
         if (archivo.exists()) {
+            List<Vuelo> vueloList = null;
+            try(BufferedReader reader = new BufferedReader(new FileReader(new File("Vuelos.txt")))) {
 
-            try(BufferedReader reader = new BufferedReader(new FileReader(new File("Vuelos.txt")));
-                BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Vuelos.txt")));) {
-
-                List<Vuelo> vueloList = gson.fromJson(reader, (new TypeToken<List<Vuelo>>() {
-                }.getType()));
+                vueloList = gson.fromJson(reader, (new TypeToken<List<Vuelo>>() {}.getType()));
 
                 if (vueloList == null) {
                     vueloList = new ArrayList<>();
@@ -415,12 +407,11 @@ public class Main {
                     }
                 }
 
-
-
-                gson.toJson(vueloList, vueloList.getClass(), writer);
-
-            } catch (IOException e) {
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
+            }
+            try(BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Vuelos.txt")))){
+                gson.toJson(vueloList, vueloList.getClass(), writer);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -449,18 +440,13 @@ public class Main {
 
     public static Usuario buscarUsuario(File archivo, String username) {
 
-        List<Usuario> usuarioList;
         Usuario encontrado = null;
 
         if (archivo.exists()) {
-            BufferedReader reader = null;
+            List<Usuario> usuarioList = null;
 
-
-            try {
-
-                reader = new BufferedReader(new FileReader("Usuarios.txt"));
-                usuarioList = gson.fromJson(reader, (new TypeToken<List<Usuario>>() {
-                }.getType()));
+            try(BufferedReader reader = new BufferedReader(new FileReader("Usuarios.txt"))) {
+                usuarioList = gson.fromJson(reader, (new TypeToken<List<Usuario>>() {}.getType()));
 
                 if (usuarioList == null)
                     System.out.println("El usuario no se encuentra registrado");
@@ -472,20 +458,9 @@ public class Main {
                     }
                 }
 
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-            } finally {
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
-
         }
         return encontrado;
     }
@@ -508,23 +483,18 @@ public class Main {
     public static void agregarUsuarioFile(File archivo, Usuario usuario) {
 
         if (archivo.exists()) {
+            List<Usuario> usuarioList = null;
+            try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
 
-            try (BufferedReader reader = new BufferedReader(new FileReader(new File("Usuarios.txt")));
-                 BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Usuarios.txt")));) {
+                usuarioList = gson.fromJson(reader, (new TypeToken<List<Usuario>>() {}.getType()));
 
-                List<Usuario> usuarioList = gson.fromJson(reader, (new TypeToken<List<Usuario>>() {
-                }.getType()));
-
+                System.out.println(usuarioList);
                 if (usuarioList == null) {
                     usuarioList = new ArrayList<>();
-
+                    System.out.println("hola");
                 }
                 usuarioList.add(usuario);
 
-                gson.toJson(usuarioList, usuarioList.getClass(), writer);
-
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -537,4 +507,5 @@ public class Main {
 
         }
     }
+
 }
