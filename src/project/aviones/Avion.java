@@ -5,7 +5,7 @@ import project.enums.Propulsion;
 import java.io.Serializable;
 import java.util.UUID;
 
-public class Avion implements Serializable {
+public class Avion {
 
     private final String id = UUID.randomUUID().toString().replaceAll("[^0-1]", "");
     private int tarifa;
