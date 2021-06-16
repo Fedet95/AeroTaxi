@@ -1,23 +1,20 @@
 package project;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 public class Vuelo {
 
-    private transient final Map<Ciudades, Map<Ciudades, Integer>> distancias = new HashMap<>() {{
-        put(Ciudades.BSAS, new HashMap<>() {{
+    private transient final Map<Ciudades, Map<Ciudades, Integer>> distancias = new LinkedHashMap<>() {{
+        put(Ciudades.BSAS, new LinkedHashMap<>() {{
             put(Ciudades.CORDOBA, 695);
             put(Ciudades.SANTIAGO, 1400);
             put(Ciudades.MONTEVIDEO, 950);
         }});
-        put(Ciudades.CORDOBA, new HashMap<>() {{
+        put(Ciudades.CORDOBA, new LinkedHashMap<>() {{
             put(Ciudades.MONTEVIDEO, 1190);
             put(Ciudades.SANTIAGO, 1050);
         }});
-        put(Ciudades.MONTEVIDEO, new HashMap<>() {{
+        put(Ciudades.MONTEVIDEO, new LinkedHashMap<>() {{
             put(Ciudades.SANTIAGO, 2100);
         }});
 

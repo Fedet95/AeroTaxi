@@ -17,6 +17,24 @@ import static project.Utilidad.pedirString;
 
 public class Main {
 
+    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    private static List<Avion> crearListaAvion() {
+        List<Avion> avionList = new ArrayList<>();
+        avionList.add(new Gold("Gold", 20, 300, 10, 200, Propulsion.REACCION, true));
+        avionList.add(new Silver("Silver", 15, 225, 7, 180, Propulsion.REACCION));
+        avionList.add(new Bronce("Bronce", 12, 150, 5, 150, Propulsion.PISTON));
+        return avionList;
+    }
+
+    private static void crearArchivoAvion(List<Avion> avionList) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Aviones.txt"))) {
+            gson.toJson(avionList, avionList.getClass(), writer);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static void main(String[] args) {
 
         // CARGA DE ARCHIVO Y LISTAS
@@ -26,11 +44,6 @@ public class Main {
         List<Avion> avionList = crearListaAvion();
         crearArchivoAvion(avionList);
 
-
-        /*Usuario usuario = new Usuario("Fede","Tacchini",38283232,23);
-        Vuelo vuelo = new Vuelo();
-        vuelo.reservarVuelo(archivoVuelos,usuario);
-        System.out.println(vuelo);*/
         //COMIENZO
 
         int opcion;
@@ -150,21 +163,6 @@ public class Main {
 
     }
 
-    public static LocalDate confirmarFecha() {
-        LocalDate fecha;
-        System.out.println("Ingrese fecha(YYYY-MM-dd): ");
-        while (true) {
-            try {
-                fecha = pedirFecha();
-                break;
-            } catch (DateTimeParseException e) {
-                System.out.println("Formato de fecha incorrecto. Reintente(YYYY-MM-dd):");
-            }
-        }
-        return fecha;
-
-    }
-
     public static Vuelo reservarVuelo(File archivo, Usuario usuario) {
 
         LocalDate fechaVuelo = confirmarFecha();
@@ -263,12 +261,9 @@ public class Main {
 
         boolean id = false;
         if (archivo.exists()) {
-            BufferedReader reader = null;
 
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-            try {
-                reader = new BufferedReader(new FileReader(new File("Vuelos.txt")));
+            try (BufferedReader reader = new BufferedReader(new FileReader("Vuelos.txt"))) {
                 vueloList = gson.fromJson(reader, (new TypeToken<List<Vuelo>>() {
                 }.getType()));
 
@@ -301,14 +296,6 @@ public class Main {
                 System.out.println(e.getMessage());
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-            } finally {
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
             }
         }
         return encontrado;
@@ -316,8 +303,7 @@ public class Main {
 
     public static Avion mostrarAvionesDisponibles(String fecha) {
 
-        List<Vuelo> vuelosList;
-        List<Avion> avionList;
+
         Avion avionElegido = null;
 
         try (BufferedReader vueloReader = new BufferedReader(new FileReader("Vuelos.txt"));
@@ -329,6 +315,7 @@ public class Main {
             }.getType()));
 
             System.out.println("Seleccione el tipo de avion para la fecha " + fecha.replace('T', ' '));
+
             if (vuelosList == null) {
                 int i = 1;
                 if (avionList != null) {
@@ -468,11 +455,10 @@ public class Main {
         if (archivo.exists()) {
             BufferedReader reader = null;
 
-            Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
             try {
 
-                reader = new BufferedReader(new FileReader(new File("Usuarios.txt")));
+                reader = new BufferedReader(new FileReader("Usuarios.txt"));
                 usuarioList = gson.fromJson(reader, (new TypeToken<List<Usuario>>() {
                 }.getType()));
 
@@ -510,9 +496,9 @@ public class Main {
         System.out.println("Ingrese Apellido");
         String apellido = pedirString();
         System.out.println("Ingrese DNI");
-        int dni = confirmarDNI();
+        int dni = pedirInt("El DNI debe contener solo numeros. Intente nuevamente");
         System.out.println("Ingrese Edad");
-        int edad = confirmarEdad();
+        int edad = pedirInt("La edad debe contener solo numeros. Intente nuevamente");
 
         Usuario usuario = new Usuario(nombre, apellido, dni, edad);
 
