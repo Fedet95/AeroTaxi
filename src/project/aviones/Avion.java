@@ -16,7 +16,7 @@ public class Avion {
     private int velocidadMax;
     private Propulsion propulsion;
 
-
+    ///region Constructors
     public Avion() {
     }
 
@@ -28,7 +28,9 @@ public class Avion {
         this.velocidadMax = velocidadMax;
         this.propulsion = propulsion;
     }
+    ///endregion
 
+    ///region Getters & Setters
     public int getTarifa() {
         return tarifa;
     }
@@ -87,6 +89,8 @@ public class Avion {
     public void setPropulsion(Propulsion propulsion) {
         this.propulsion = propulsion;
     }
+
+    ///endregion
 
     @Override
     public String toString() {
