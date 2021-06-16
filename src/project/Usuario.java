@@ -10,7 +10,7 @@ public class Usuario {
     private int edad;
     private String username;
     private String pw;
-    private transient float totalGastado;
+    private float totalGastado;
     private String mejorFlotaUtilizada;
 
     public Usuario() {
