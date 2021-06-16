@@ -1,4 +1,4 @@
-package Project;
+package project;
 
 public class Bronce extends Avion {
 

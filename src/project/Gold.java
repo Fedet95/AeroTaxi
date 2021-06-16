@@ -1,4 +1,4 @@
-package Project;
+package project;
 
 public class Gold extends Avion implements Catering {
 

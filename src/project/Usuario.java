@@ -1,4 +1,4 @@
-package Project;
+package project;
 
 import java.util.Scanner;
 
@@ -75,7 +75,7 @@ public class Usuario {
     public String crearContraseña() {
         System.out.println("Ingrese una contraseña de 5 caracteres: ");
         String contraseña = new Scanner(System.in).next();
-        if (contraseña.length() == 5) {
+        if (contraseña.length() != 5) {
             System.out.println("La contraseña no es de 5 caracteres. Reintente");
             contraseña = new Scanner(System.in).next();
         }

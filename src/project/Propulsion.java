@@ -1,7 +1,6 @@
-package Project;
+package project;
 
 public enum Propulsion {
-
     REACCION,
-    PISTON;
+    PISTON
 }

@@ -1,9 +1,9 @@
 [
   {
     "wifi": true,
+    "id": "10",
     "tarifa": 6000,
     "categoria": "Gold",
-    "id": "110",
     "capacidadCombustible": 20,
     "costoKm": 300.0,
     "capacidadMax": 10,
@@ -11,9 +11,9 @@
     "propulsion": "REACCION"
   },
   {
+    "id": "0111",
     "tarifa": 4000,
     "categoria": "Silver",
-    "id": "1000",
     "capacidadCombustible": 15,
     "costoKm": 225.0,
     "capacidadMax": 7,
@@ -21,9 +21,9 @@
     "propulsion": "REACCION"
   },
   {
+    "id": "11011",
     "tarifa": 3000,
     "categoria": "Bronce",
-    "id": "010",
     "capacidadCombustible": 12,
     "costoKm": 150.0,
     "capacidadMax": 5,

@@ -1,4 +1,4 @@
-package Project;
+package project;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -7,13 +7,15 @@ import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
+
+import static project.Utilidad.pedirInt;
+import static project.Utilidad.pedirString;
 
 public class Main {
-    public static Scanner aux = new Scanner(System.in);
 
     public static void main(String[] args) {
 
@@ -49,14 +51,14 @@ public class Main {
                 e.getMessage();
             } catch (Exception e) {
                 e.getMessage();
-            }finally {
-                    try {
-                        writer.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            } finally {
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
+        }
 
 
         /*Usuario usuario = new Usuario("Fede","Tacchini",38283232,23);
@@ -79,7 +81,7 @@ public class Main {
                 System.out.println("3. Ingresar como Administrador");
                 System.out.println("4. Salir");
                 System.out.println("Escriba una de las opciones: ");
-                opcion = new Scanner(System.in).nextInt();
+                opcion = pedirInt();
 
                 switch (opcion) {
                     case 1:
@@ -87,7 +89,6 @@ public class Main {
                         Usuario nuevo = crearUsuario();
                         System.out.println(nuevo);
                         agregarUsuarioFile(archivoUsuarios, nuevo);
-
                         break;
                     case 2:
                         System.out.println("LOGEO DE USUARIO\n");
@@ -126,7 +127,7 @@ public class Main {
                 System.out.println("3. Log out");
 
                 System.out.println("Escriba una de las opciones: ");
-                opcion = new Scanner(System.in).nextInt();
+                opcion = pedirInt();
 
                 switch (opcion) {
                     case 1:
@@ -136,8 +137,7 @@ public class Main {
                     case 2:
                         System.out.println("Cancelar un vuelo");
                         System.out.println("Ingrese ID de vuelo reservado: ");
-                        Scanner buscadorVuelo = new Scanner(System.in);
-                        String idBuscado = buscadorVuelo.nextLine();
+                        String idBuscado = pedirString();
                         Vuelo vueloBuscado = buscarVuelo(archivo, idBuscado, usuario);
                         if (vueloBuscado != null) {
                             System.out.println("Vuelo encontrado");
@@ -163,20 +163,30 @@ public class Main {
     }
 
     public static LocalDate pedirFecha() {
-        Scanner auxi = new Scanner(System.in);
-        System.out.println("Ingrese fecha: ");
-        System.out.println("IMPORTANTE - Ingrese en formato YYYY-MM-dd");
-        String fechaprueba = auxi.nextLine();
+        String fechaprueba = pedirString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate fechahoravuelo = LocalDate.parse(fechaprueba, formatter);
-
         return fechahoravuelo;
+    }
+
+    public static LocalDate confirmarFecha() {
+        LocalDate fecha;
+        System.out.println("Ingrese fecha(YYYY-MM-dd): ");
+        while (true) {
+            try {
+                fecha = pedirFecha();
+                break;
+            } catch (DateTimeParseException e) {
+                System.out.println("Formato de fecha incorrecto. Reintente(YYYY-MM-dd):");
+            }
+        }
+        return fecha;
 
     }
 
     public static Vuelo reservarVuelo(File archivo, Usuario usuario) { //TODAVIA NO COMPARA FECHAS Y AVIONES DISPONIBLES
 
-        LocalDate fechaVuelo = pedirFecha();
+        LocalDate fechaVuelo = confirmarFecha();
 
         System.out.println("Ingrese NUMERO de ciudad de Origen");
         Ciudades origen;
@@ -187,7 +197,7 @@ public class Main {
             System.out.println(i + ". " + distancias.getKey());
             i++;
         }
-        int opcionOrigen = aux.nextInt();
+        int opcionOrigen = pedirInt();
         if (opcionOrigen == 1) {
             origen = Ciudades.BSAS;
         } else {
@@ -205,7 +215,7 @@ public class Main {
             System.out.println(x + ". " + distancias.getKey());
             x++;
         }
-        int opcionDestino = aux.nextInt();
+        int opcionDestino = pedirInt();
         if (origen == Ciudades.BSAS) {
             if (opcionDestino == 1)
                 destino = Ciudades.MONTEVIDEO;
@@ -247,7 +257,7 @@ public class Main {
                     p++;
                 }
             }
-            int opcion = aux.nextInt();
+            int opcion = pedirInt();
 
             if (opcion<=3 && opcion>=1)
                 avionElegido = avionList.get(opcion-1);
@@ -270,13 +280,13 @@ public class Main {
         }*/
 
         //(Cantidad de kms * Costo del km) + (cantidad de pasajeros * 3500) + (Tarifa del tipo de avión)
-        int acompañantes = aux.nextInt();
+        int acompañantes = pedirInt();
         System.out.println("Ingrese cantidad de acompañantes");
         if (acompañantes > avionElegido.getCapacidadMax()) {
             while (acompañantes > avionElegido.getCapacidadMax()) {
                 System.out.println("La cantidad de pasajeros seleccionada supera el limite del Avión");
                 System.out.println("Seleccione una cantidad menor a " + avionElegido.getCapacidadMax());
-                acompañantes = aux.nextInt();
+                acompañantes = pedirInt();
             }
         }
 
@@ -380,7 +390,7 @@ public class Main {
                         System.out.println(i + ". " + avion.getCategoria());
                         i++;
                     }
-                    int opcion = aux.nextInt();
+                    int opcion = pedirInt();
 
                     if (opcion <= i && opcion >= 1)
                         avionElegido = avionList.get(opcion - 1);
@@ -400,7 +410,7 @@ public class Main {
                         System.out.println(i + ". " + avion.getCategoria());
                         i++;
                     }
-                    int opcion = aux.nextInt();
+                    int opcion = pedirInt();
 
                     if (opcion <= i && opcion >= 1)
                         avionElegido = avionList.get(opcion - 1);
@@ -524,13 +534,13 @@ public class Main {
 
     public static Usuario logInUsuario(File archivo) {
         System.out.println("Ingrese Usuario");
-        String username = aux.next();
+        String username = pedirString();
         Usuario usuarioLogeado = buscarUsuario(archivo, username);
         if (usuarioLogeado == null)
             System.out.println("El usuario " + username + " no se encuentra logeado");
         else {
             System.out.println("Ingrese contraseña: ");
-            String pw = aux.next();
+            String pw = pedirString();
             if (!usuarioLogeado.getPw().equals(pw)) {
                 System.out.println("Contraseña incorrecta");
             } else {
@@ -587,17 +597,43 @@ public class Main {
 
     public static Usuario crearUsuario() {
         System.out.println("Ingrese Nombre:");
-        String nombre = aux.next();
+        String nombre = pedirString();
         System.out.println("Ingrese Apellido");
-        String apellido = aux.next();
+        String apellido = pedirString();
         System.out.println("Ingrese DNI");
         int dni = confirmarDNI();
         System.out.println("Ingrese Edad");
-        int edad = aux.nextInt();
+        int edad = confirmarEdad();
 
         Usuario usuario = new Usuario(nombre, apellido, dni, edad);
 
         return usuario;
+    }
+
+    private static int confirmarEdad() {
+        int edad;
+        while (true) {
+            try {
+                edad = pedirInt();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("La edad debe contener solo numeros");
+            }
+        }
+        return edad;
+    }
+
+    private static int confirmarDNI() {
+        int dni;
+        while (true) {
+            try {
+                dni = pedirInt();
+                break;
+            } catch (InputMismatchException e) {
+                System.out.println("El DNI debe contener solo numeros. Intente nuevamente");
+            }
+        }
+        return dni;
     }
 
     public static void agregarUsuarioFile(File archivo, Usuario usuario) { //retorno?
