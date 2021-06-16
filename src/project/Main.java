@@ -528,6 +528,13 @@ public class Main {
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
+                gson.toJson(usuarioList, usuarioList.getClass(), writer);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
         }
     }
 }
