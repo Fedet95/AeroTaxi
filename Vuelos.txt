@@ -55,24 +55,5 @@
       "propulsion": "PISTON"
     },
     "costoVuelo": 159500.0
-  },
-  {
-    "id": "00011",
-    "fecha": "2021-08-22",
-    "origen": "CORDOBA",
-    "destino": "SANTIAGO",
-    "clientUsername": "FEDERICOTACCHINI",
-    "acompañantes": 2,
-    "avion": {
-      "id": "000",
-      "tarifa": 4000,
-      "categoria": "Silver",
-      "capacidadCombustible": 15,
-      "costoKm": 225.0,
-      "capacidadMax": 7,
-      "velocidadMax": 180,
-      "propulsion": "REACCION"
-    },
-    "costoVuelo": 250750.0
   }
 ]

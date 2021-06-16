@@ -623,7 +623,6 @@ public class Main {
                     for (Vuelo vuelos : vueloList) {
                         if (vuelos.getId().compareTo(vuelo.getId()) == 0) {
                             vueloList.remove(vuelos);
-                            System.out.println("eliminado");
                         }
                     }
                 }
