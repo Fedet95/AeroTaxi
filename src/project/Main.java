@@ -82,6 +82,7 @@ public class Main {
                             System.out.println("No pueden registrarse menores de edad");
                             break;
                         } else {
+                            System.out.println(nuevo);
                             System.out.println("Usuario creado. Confirmar?");
                             System.out.println("Escriba 'SI' para confirmar");
                             String confirmacion = pedirString().toUpperCase(Locale.ROOT);
