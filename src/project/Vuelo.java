@@ -1,5 +1,8 @@
 package project;
 
+import project.aviones.Avion;
+import project.enums.Ciudades;
+
 import java.util.*;
 
 public class Vuelo {
@@ -109,7 +112,6 @@ public class Vuelo {
         return distancias;
     }
 
-
     public Ciudades pedirOrigen() {
         Scanner auxi = new Scanner(System.in);
         System.out.println("Ingrese NUMERO de ciudad de Origen");
@@ -170,16 +172,16 @@ public class Vuelo {
 
     @Override
     public String toString() {
-        return "\nVuelo: {" +
+        return "\nVuelo: " +
                 "\nID Vuelo: " + id +
-                "\nFecha:" + fecha +
-                "\nOrigen:" + origen +
-                "\nDestino:" + destino +
-                "\nClientUsername:" + clientUsername +
-                "\nAcompañantes:" + acompañantes +
-                "\nAvion:" + avion +
-                "\nCostoVuelo:" + costoVuelo +
-                '}';
+                "\nFecha: " + fecha +
+                "\nOrigen: " + origen +
+                "\nDestino: " + destino +
+                "\nClientUsername: " + clientUsername +
+                "\nAcompañantes: " + acompañantes +
+                "\nAvion: " + avion +
+                "\nCostoVuelo: $" + costoVuelo +
+                "\n-------------------------------";
     }
 }
 

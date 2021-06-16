@@ -1,4 +1,4 @@
-package project;
+package project.enums;
 
 public enum Ciudades {
     BSAS,

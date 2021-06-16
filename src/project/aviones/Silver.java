@@ -1,4 +1,6 @@
-package project;
+package project.aviones;
+
+import project.enums.Propulsion;
 
 public class Silver extends Avion implements Catering {
     public Silver() {}

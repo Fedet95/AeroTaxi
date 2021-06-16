@@ -1,7 +1,7 @@
 [
   {
     "wifi": true,
-    "id": "000110",
+    "id": "1001110111",
     "tarifa": 6000,
     "categoria": "Gold",
     "capacidadCombustible": 20,
@@ -11,7 +11,7 @@
     "propulsion": "REACCION"
   },
   {
-    "id": "10110",
+    "id": "011",
     "tarifa": 4000,
     "categoria": "Silver",
     "capacidadCombustible": 15,
@@ -21,7 +21,7 @@
     "propulsion": "REACCION"
   },
   {
-    "id": "00011",
+    "id": "01011",
     "tarifa": 3000,
     "categoria": "Bronce",
     "capacidadCombustible": 12,

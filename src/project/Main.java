@@ -3,7 +3,13 @@ package project;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import jdk.swing.interop.SwingInterOpUtils;
+import project.aviones.Avion;
+import project.aviones.Bronce;
+import project.aviones.Gold;
+import project.aviones.Silver;
+import project.enums.Ciudades;
+import project.enums.Propulsion;
+import project.exceptions.DniNoValidoException;
 
 import java.io.*;
 import java.time.LocalDate;
@@ -12,13 +18,18 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Locale;
 
-import static project.Utilidad.pedirInt;
-import static project.Utilidad.pedirString;
+import static project.utilidad.Utilidad.pedirInt;
+import static project.utilidad.Utilidad.pedirString;
 
 public class Main {
-    //mostrarAvionesDisponibles REVISAR BUFFERS
-    private static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    ///region Utilizamo un final static gson para el programa
+    private final static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    ///endregion
+
+    ///region Previo al inicio del programa, se carga la lista que contiene los 3 tipos de aviones disponibles
 
     private static List<Avion> crearListaAvion() {
         List<Avion> avionList = new ArrayList<>();
@@ -35,6 +46,7 @@ public class Main {
             System.out.println(e.getMessage());
         }
     }
+    ///endregion
 
     public static void main(String[] args) {
 
@@ -67,8 +79,16 @@ public class Main {
                     case 1:
                         System.out.println("REGISTRO DE USUARIO");
                         Usuario nuevo = crearUsuario();
-                        System.out.println(nuevo);
-                        agregarUsuarioFile(archivoUsuarios, nuevo);
+                        System.out.println("Usuario creado. Confirmar?");
+                        System.out.println("Escriba 'SI' para confirmar");
+                        String confirmacion = pedirString().toUpperCase(Locale.ROOT);
+                        if (confirmacion.equals("SI")) {
+                            System.out.println("Registro completo");
+                            agregarUsuarioFile(archivoUsuarios, nuevo);
+                        } else {
+                            System.out.println("Operacion cancelada. regresando al menu");
+                        }
+
                         break;
                     case 2:
                         System.out.println("LOGEO DE USUARIO\n");
@@ -79,6 +99,7 @@ public class Main {
                         break;
                     case 3:
                         System.out.println("Ingreso como Administrador");
+                        menuAdmin(archivoUsuarios, archivoVuelos);
                         break;
                     case 4:
                         System.out.println("Cerrando Aero-Taxi");
@@ -89,14 +110,18 @@ public class Main {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Debe ingresar un numero entre 1 y 4");
+            } catch (DniNoValidoException e) {
+                System.out.println("DNI incorrecto. Debe contener 7 u 8 digitos");
             }
         }
 
     }
 
 
-    public static void menuUsuario(Usuario usuario, File archivo) {
+    ///region Menu Usuario / Admin
+    public static void menuUsuario(Usuario usuario, File archivoVuelos) {
         int opcion;
+        String confirmacion;
         boolean salir = false;
         while (!salir) {
             try {
@@ -112,20 +137,45 @@ public class Main {
                 switch (opcion) {
                     case 1:
                         System.out.println("Reservar un vuelo");
-                        reservarVuelo(archivo, usuario);
+                        Vuelo vueloReserva = reservarVuelo(archivoVuelos, usuario);
+                        System.out.println("VUELO RESERVADO");
+                        System.out.println(vueloReserva);
+                        System.out.println("------------------------");
+                        System.out.println("¿Confirma la reserva?");
+                        System.out.println("Escriba 'SI' para confirmar");
+                        confirmacion = pedirString().toUpperCase(Locale.ROOT);
+                        if (confirmacion.equals("SI")) {
+                            usuario.setTotalGastado(usuario.getTotalGastado() + vueloReserva.getCostoVuelo());
+                            agregarVueloFile(archivoVuelos, vueloReserva);
+                            if (usuario.getMejorFlotaUtilizada() == null) ///Se cambia a una mejor flota utilizada en caso de ser necesario
+                                usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
+                            else if (usuario.getMejorFlotaUtilizada().equals("Bronce") && vueloReserva.getAvion().getCategoria().equals("Silver")
+                                    || vueloReserva.getAvion().getCategoria().equals("Gold")) {
+                                usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
+                            } else if (usuario.getMejorFlotaUtilizada().equals("Silver") && vueloReserva.getAvion().getCategoria().equals("Bronce")) {
+                                usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
+                            }
+                        } else
+                            System.out.println("Operacion cancelada. Regresando al menu");
                         break;
                     case 2:
                         System.out.println("Cancelar un vuelo");
                         System.out.println("Ingrese ID de vuelo reservado: ");
                         String idBuscado = pedirString();
-                        Vuelo vueloBuscado = buscarVuelo(archivo, idBuscado, usuario);
+                        Vuelo vueloBuscado = buscarVuelo(archivoVuelos, idBuscado, usuario);
                         if (vueloBuscado != null) {
                             System.out.println("Vuelo encontrado");
                             System.out.println(vueloBuscado);
                             System.out.println("------------------------");
-                            System.out.println("Vuelo eliminado");
-                            borrarVueloFile(archivo, vueloBuscado);
-
+                            System.out.println("¿Confirma la cancelacion?");
+                            System.out.println("Escriba 'SI' para confirmar");
+                            confirmacion = pedirString().toUpperCase(Locale.ROOT);
+                            if (confirmacion.equals("SI")) {
+                                System.out.println("Vuelo eliminado");
+                                borrarVueloFile(archivoVuelos, vueloBuscado);
+                            } else {
+                                System.out.println("Operacion cancelada. regresando al menu");
+                            }
                         } else
                             System.out.println("Regresando al Menu");
                         break;
@@ -142,6 +192,159 @@ public class Main {
         }
     }
 
+    public static void menuAdmin(File archivoUsuario, File archivoVuelos) {
+        int opcion;
+        boolean salir = false;
+        System.out.println("AERO-TAXI");
+        System.out.println("Bienvenido");
+
+        while (!salir) {
+            try {
+                System.out.println("Ingrese la opcion deseada:\n");
+
+                System.out.println("1. Ver listado de Clientes");
+                System.out.println("2. Ver vuelos programados en una fecha indicada");
+                System.out.println("3. Salir");
+                System.out.println("Escriba una de las opciones: ");
+                opcion = pedirInt();
+
+                switch (opcion) {
+                    case 1:
+                        System.out.println("Listado de Clientes");
+                        mostrarUsuariosFile(archivoUsuario);
+                        break;
+                    case 2:
+                        System.out.println("Vuelos programados por fecha indicada");
+                        LocalDate fecha = confirmarFecha();
+                        mostrarVuelosPorFecha(archivoVuelos, fecha);
+                        break;
+                    case 3:
+                        System.out.println("Cerrando Aero-Taxi");
+                        salir = true;
+                        break;
+                    default:
+                        System.out.println("Solo números entre 1 y 3");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Debe ingresar un numero entre 1 y 3");
+            }
+        }
+    }
+    ///endregion
+
+    ///region Metodos para manejo de usuarios
+
+    public static Usuario logInUsuario(File archivo) {
+        System.out.println("Ingrese Usuario");
+        String username = pedirString();
+        Usuario usuarioLogeado = buscarUsuario(archivo, username);
+        if (usuarioLogeado == null)
+            System.out.println("El usuario " + username + " no se encuentra logeado");
+        else {
+            System.out.println("Ingrese contraseña: ");
+            String pw = pedirString();
+            if (!usuarioLogeado.getPw().equals(pw)) {
+                System.out.println("Contraseña incorrecta");
+            } else {
+                System.out.println("Bienvenido: " + username);
+                return usuarioLogeado;
+            }
+        }
+        return null;
+    }
+
+    public static Usuario buscarUsuario(File archivo, String username) {
+
+        Usuario encontrado = null;
+
+        if (archivo.exists()) {
+            List<Usuario> usuarioList = null;
+
+            try (BufferedReader reader = new BufferedReader(new FileReader("Usuarios.txt"))) {
+                usuarioList = gson.fromJson(reader, (new TypeToken<List<Usuario>>() {
+                }.getType()));
+
+                if (usuarioList == null)
+                    System.out.println("El usuario no se encuentra registrado");
+                else {
+                    for (Usuario aux : usuarioList) {
+                        if (aux.getUsername().compareTo(username) == 0) {
+                            encontrado = aux;
+                        }
+                    }
+                }
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return encontrado;
+    }
+
+    public static Usuario crearUsuario() throws DniNoValidoException {
+        System.out.println("Ingrese Nombre:");
+        String nombre = pedirString();
+        System.out.println("Ingrese Apellido");
+        String apellido = pedirString();
+        System.out.println("Ingrese DNI");
+        int dni = confirmarDNI();
+        System.out.println("Ingrese Edad");
+        int edad = pedirInt("La edad debe contener solo numeros. Intente nuevamente");
+
+        Usuario usuario = new Usuario(nombre, apellido, dni, edad);
+
+        return usuario;
+    }
+
+    public static void mostrarUsuariosFile(File archivo) {
+
+        if (archivo.exists()) {
+            List<Usuario> usuarioList = null;
+            try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
+                usuarioList = gson.fromJson(reader, (new TypeToken<List<Usuario>>() {
+                }.getType()));
+
+                if (usuarioList != null) {
+                    for (Usuario usuarios : usuarioList) {
+                        System.out.println(usuarios);
+                    }
+                } else
+                    System.out.println("No hay usuarios registrados en el Sistema");
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    public static void agregarUsuarioFile(File archivo, Usuario usuario) {
+
+        if (archivo.exists()) {
+            List<Usuario> usuarioList = null;
+            try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
+
+                usuarioList = gson.fromJson(reader, (new TypeToken<List<Usuario>>() {
+                }.getType()));
+
+                if (usuarioList == null) {
+                    usuarioList = new ArrayList<>();
+                }
+                usuarioList.add(usuario);
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
+                gson.toJson(usuarioList, usuarioList.getClass(), writer);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+        }
+    }
+    ///endregion
+
+    ///region Metodos para manejo de vuelos
     public static LocalDate pedirFecha() {
         String fechaprueba = pedirString();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -162,6 +365,18 @@ public class Main {
         }
         return fecha;
 
+    }
+
+    public static int confirmarDNI() throws DniNoValidoException {
+        int dni = pedirInt("El DNI debe contener solo numeros. Intente nuevamente");
+        System.out.println("Ingrese DNI");
+        while (true) {
+            if (Integer.toString(dni).length() < 7 || Integer.toString(dni).length() > 8) {
+                throw new DniNoValidoException();
+            } else
+                break;
+        }
+        return dni;
     }
 
     public static Vuelo reservarVuelo(File archivo, Usuario usuario) {
@@ -246,9 +461,10 @@ public class Main {
         float costoVuelo = (cantKm * costoKm) + ((acompañantes + 1) * 3500) + avionElegido.getTarifa();
 
         Vuelo vuelo = new Vuelo(fechaVuelo.toString(), origen, destino, usuario.getUsername(), acompañantes, avionElegido, costoVuelo);
-        System.out.println("VUELO RESERVADO");
-        agregarVueloFile(archivo, vuelo);
+
         return vuelo;
+
+
     }
 
     public static Vuelo buscarVuelo(File archivo, String idBuscado, Usuario usuario) {
@@ -264,7 +480,8 @@ public class Main {
         if (archivo.exists()) {
 
             try (BufferedReader reader = new BufferedReader(new FileReader("Vuelos.txt"))) {
-                vueloList = gson.fromJson(reader, (new TypeToken<List<Vuelo>>() {}.getType()));
+                vueloList = gson.fromJson(reader, (new TypeToken<List<Vuelo>>() {
+                }.getType()));
 
                 if (vueloList == null) {
                     System.out.println("No hay vuelos registrados");
@@ -276,13 +493,13 @@ public class Main {
                                 String fechaVuelo = vuelos.getFecha();
                                 LocalDate fechaVueloLD = LocalDate.parse(fechaVuelo, formatter);
                                 if (fechaActualLD.isAfter(fechaVueloLD))
-                                    System.out.println("El vuelo ID " + idBuscado + "no puede ser cancelado ya que tiene fecha anterior a la actual");
+                                    System.out.println("El vuelo ID " + idBuscado + " no puede ser cancelado ya que tiene fecha anterior a la actual");
                                 if (fechaActualLD.isEqual(fechaVueloLD)) {
                                     System.out.println("El vuelo ID " + idBuscado + " no puede ser cancelado debido a estar programado para el día de hoy");
                                 } else
                                     encontrado = vuelos;
                             } else
-                                System.out.println("El vuelo ID " + idBuscado + "no puede ser borrado por un usuario distinto a quien figura en la reserva");
+                                System.out.println("El vuelo ID " + idBuscado + " no puede ser borrado por un usuario distinto a quien figura en la reserva");
                         }
                     }
                     if (id == false)
@@ -297,13 +514,77 @@ public class Main {
         return encontrado;
     }
 
+    public static void agregarVueloFile(File archivo, Vuelo vuelo) {
+
+        if (archivo.exists()) {
+            List<Vuelo> vueloList = null;
+            try (BufferedReader reader = new BufferedReader(new FileReader(new File("Vuelos.txt")))) {
+
+                vueloList = gson.fromJson(reader, (new TypeToken<List<Vuelo>>() {
+                }.getType()));
+
+                if (vueloList == null) {
+                    vueloList = new ArrayList<>();
+                }
+
+                vueloList.add(vuelo);
+
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Vuelos.txt")))) {
+                gson.toJson(vueloList, vueloList.getClass(), writer);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    public static void borrarVueloFile(File archivo, Vuelo vuelo) {
+
+        if (archivo.exists()) {
+            List<Vuelo> vueloList = null;
+            try (BufferedReader reader = new BufferedReader(new FileReader(new File("Vuelos.txt")))) {
+
+                vueloList = gson.fromJson(reader, (new TypeToken<List<Vuelo>>() {
+                }.getType()));
+
+                if (vueloList == null) {
+                    vueloList = new ArrayList<>();
+
+                } else {
+
+                    for (Vuelo vuelos : vueloList) {
+                        if (vuelos.getId().compareTo(vuelo.getId()) == 0) {
+                            vueloList.remove(vuelos);
+                            System.out.println("eliminado");
+                        }
+                    }
+                }
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Vuelos.txt")))) {
+                gson.toJson(vueloList, vueloList.getClass(), writer);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+    }
+    ///endregion
+
+    ///region Metodos de Administrador
     public static Avion mostrarAvionesDisponibles(String fecha) {
 
-
         Avion avionElegido = null;
-
-        try (BufferedReader vueloReader = new BufferedReader(new FileReader("Vuelos.txt"));
-             BufferedReader avionReader = new BufferedReader(new FileReader("Aviones.txt"))) {
+        BufferedReader vueloReader = null;
+        BufferedReader avionReader = null;
+        try {
+            avionReader = new BufferedReader(new FileReader("Aviones.txt"));
+            vueloReader = new BufferedReader(new FileReader("Vuelos.txt"));
 
             List<Vuelo> vuelosList = gson.fromJson(vueloReader, (new TypeToken<List<Vuelo>>() {
             }.getType()));
@@ -346,7 +627,6 @@ public class Main {
                     else {
                         System.out.println("Opcion incorrecta");
                     }
-
                 }
             }
 
@@ -354,158 +634,54 @@ public class Main {
             System.out.println(e.getMessage());
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        } finally {
+            if (vueloReader != null || avionReader != null) {
+                try {
+                    vueloReader.close();
+                    avionReader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return avionElegido;
     }
 
-    public static void agregarVueloFile(File archivo, Vuelo vuelo) {
+    public static void mostrarVuelosPorFecha(File archivoVuelos, LocalDate fechaBuscada) {
 
-        if (archivo.exists()) {
-            List<Vuelo> vueloList = null;
-            try(BufferedReader reader = new BufferedReader(new FileReader(new File("Vuelos.txt")))) {
+        if (archivoVuelos.exists()) {
+
+            List<Vuelo> vueloList;
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            try (BufferedReader reader = new BufferedReader(new FileReader("Vuelos.txt"))) {
 
                 vueloList = gson.fromJson(reader, (new TypeToken<List<Vuelo>>() {
                 }.getType()));
 
                 if (vueloList == null) {
-                    vueloList = new ArrayList<>();
-                }
-
-                vueloList.add(vuelo);
-
-
-
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            try(BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Vuelos.txt")))){
-                gson.toJson(vueloList, vueloList.getClass(), writer);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    public static void borrarVueloFile(File archivo, Vuelo vuelo) {
-
-        if (archivo.exists()) {
-            List<Vuelo> vueloList = null;
-            try(BufferedReader reader = new BufferedReader(new FileReader(new File("Vuelos.txt")))) {
-
-                vueloList = gson.fromJson(reader, (new TypeToken<List<Vuelo>>() {}.getType()));
-
-                if (vueloList == null) {
-                    vueloList = new ArrayList<>();
-
+                    System.out.println("No hay vuelos registrados");
                 } else {
-
+                    int i = 0;
                     for (Vuelo vuelos : vueloList) {
-                        if (vuelos.getId().compareTo(vuelo.getId()) == 0) {
-                            vueloList.remove(vuelos);
-                            System.out.println("eliminado");
+                        String fechaVuelo = vuelos.getFecha();
+                        LocalDate fechaVueloLD = LocalDate.parse(fechaVuelo, formatter);
+                        if (fechaBuscada.isEqual(fechaVueloLD)) {
+                            System.out.println(vuelos);
+                            i++;
                         }
                     }
-                }
-
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            try(BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Vuelos.txt")))){
-                gson.toJson(vueloList, vueloList.getClass(), writer);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-    }
-
-    public static Usuario logInUsuario(File archivo) {
-        System.out.println("Ingrese Usuario");
-        String username = pedirString();
-        Usuario usuarioLogeado = buscarUsuario(archivo, username);
-        if (usuarioLogeado == null)
-            System.out.println("El usuario " + username + " no se encuentra logeado");
-        else {
-            System.out.println("Ingrese contraseña: ");
-            String pw = pedirString();
-            if (!usuarioLogeado.getPw().equals(pw)) {
-                System.out.println("Contraseña incorrecta");
-            } else {
-                System.out.println("Bienvenido: " + username);
-                return usuarioLogeado;
-            }
-        }
-        return null;
-    }
-
-    public static Usuario buscarUsuario(File archivo, String username) {
-
-        Usuario encontrado = null;
-
-        if (archivo.exists()) {
-            List<Usuario> usuarioList = null;
-
-            try(BufferedReader reader = new BufferedReader(new FileReader("Usuarios.txt"))) {
-                usuarioList = gson.fromJson(reader, (new TypeToken<List<Usuario>>() {}.getType()));
-
-                if (usuarioList == null)
-                    System.out.println("El usuario no se encuentra registrado");
-                else {
-                    for (Usuario aux : usuarioList) {
-                        if (aux.getUsername().compareTo(username) == 0) {
-                            encontrado = aux;
-                        }
-                    }
+                    if (i == 0)
+                        System.out.println("No hay vuelos programados con la fecha indicada");
                 }
 
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
-        return encontrado;
     }
 
-    public static Usuario crearUsuario() {
-        System.out.println("Ingrese Nombre:");
-        String nombre = pedirString();
-        System.out.println("Ingrese Apellido");
-        String apellido = pedirString();
-        System.out.println("Ingrese DNI");
-        int dni = pedirInt("El DNI debe contener solo numeros. Intente nuevamente");
-        System.out.println("Ingrese Edad");
-        int edad = pedirInt("La edad debe contener solo numeros. Intente nuevamente");
-
-        Usuario usuario = new Usuario(nombre, apellido, dni, edad);
-
-        return usuario;
-    }
-
-    public static void agregarUsuarioFile(File archivo, Usuario usuario) {
-
-        if (archivo.exists()) {
-            List<Usuario> usuarioList = null;
-            try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
-
-                usuarioList = gson.fromJson(reader, (new TypeToken<List<Usuario>>() {}.getType()));
-
-                System.out.println(usuarioList);
-                if (usuarioList == null) {
-                    usuarioList = new ArrayList<>();
-                    System.out.println("hola");
-                }
-                usuarioList.add(usuario);
-
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
-                gson.toJson(usuarioList, usuarioList.getClass(), writer);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-
-        }
-    }
-
+    ///endregion
 }
+
+

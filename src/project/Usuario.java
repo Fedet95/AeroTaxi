@@ -10,6 +10,8 @@ public class Usuario {
     private int edad;
     private String username;
     private String pw;
+    private transient float totalGastado;
+    private String mejorFlotaUtilizada;
 
     public Usuario() {
 
@@ -28,7 +30,7 @@ public class Usuario {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
+    public void setNombre(String nombre){
         this.nombre = nombre;
     }
 
@@ -72,6 +74,22 @@ public class Usuario {
         this.pw = pw;
     }
 
+    public float getTotalGastado() {
+        return totalGastado;
+    }
+
+    public void setTotalGastado(float totalGastado) {
+        this.totalGastado = totalGastado;
+    }
+
+    public String getMejorFlotaUtilizada() {
+        return mejorFlotaUtilizada;
+    }
+
+    public void setMejorFlotaUtilizada(String mejorFlotaUtilizada) {
+        this.mejorFlotaUtilizada = mejorFlotaUtilizada;
+    }
+
     public String crearContraseña() {
         System.out.println("Ingrese una contraseña de 5 caracteres: ");
         String contraseña = new Scanner(System.in).next();
@@ -85,11 +103,12 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return "\nUsuario:" +
-                "\nNombre:" + nombre +
-                "\nApellido:" + apellido +
-                "\nDNI:" + DNI +
-                "\nEdad:" + edad +
-                '}';
+        return "\nUsuario: " +
+                "\nNombre: " + nombre +
+                "\nApellido: " + apellido +
+                "\nDNI: " + DNI +
+                "\nEdad: " + edad +
+                "\nTotal Gastado: $" + totalGastado +
+                "\n-------------------------------";
     }
 }

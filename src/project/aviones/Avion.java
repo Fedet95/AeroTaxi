@@ -1,4 +1,6 @@
-package project;
+package project.aviones;
+
+import project.enums.Propulsion;
 
 import java.io.Serializable;
 import java.util.UUID;
@@ -91,10 +93,10 @@ public class Avion implements Serializable {
         return "\nAvion:{" +
                 "\nCategoria:" + categoria +
                 "\nID Avion:" + id +
-                "\nCapacidadCombustible:" + capacidadCombustible +
-                "\nCostoKm:" + costoKm +
-                "\nCapacidadMax:" + capacidadMax +
-                "\nVelocidadMax:" + velocidadMax +
+                "\nCapacidadCombustible: " + capacidadCombustible + " lts." +
+                "\nCostoKm: $" + costoKm +
+                "\nCapacidadMax: " + capacidadMax + " pasajeros" +
+                "\nVelocidadMax: " + velocidadMax + " km/h" +
                 "\nPropulsion:" + propulsion +
                 '}';
     }
