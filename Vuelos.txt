@@ -5,17 +5,131 @@
     "origen": "BSAS",
     "destino": "MONTEVIDEO",
     "clientUsername": "FEDERICOTACCHINI",
-    "acompañantes": 3,
+    "acompañantes": 3.0,
     "avion": {
       "id": "10",
-      "tarifa": 3000,
+      "tarifa": 3000.0,
       "categoria": "Bronce",
-      "capacidadCombustible": 12,
+      "capacidadCombustible": 12.0,
       "costoKm": 150.0,
-      "capacidadMax": 5,
-      "velocidadMax": 150,
+      "capacidadMax": 5.0,
+      "velocidadMax": 150.0,
       "propulsion": "PISTON"
     },
     "costoVuelo": 159500.0
+  },
+  {
+    "id": "101",
+    "fecha": "2021-09-20",
+    "origen": "BSAS",
+    "destino": "SANTIAGO",
+    "clientUsername": "MARTINOLGAS",
+    "acompañantes": 2.0,
+    "avion": {
+      "id": "101000",
+      "tarifa": 4000.0,
+      "categoria": "Silver",
+      "capacidadCombustible": 15.0,
+      "costoKm": 225.0,
+      "capacidadMax": 7.0,
+      "velocidadMax": 180.0,
+      "propulsion": "REACCION"
+    },
+    "costoVuelo": 329500.0
+  },
+  {
+    "id": "11",
+    "fecha": "2021-09-20",
+    "origen": "MONTEVIDEO",
+    "destino": "SANTIAGO",
+    "clientUsername": "MARTINOLGAS",
+    "acompañantes": 2.0,
+    "avion": {
+      "id": "010111",
+      "tarifa": 3000.0,
+      "categoria": "Bronce",
+      "capacidadCombustible": 12.0,
+      "costoKm": 150.0,
+      "capacidadMax": 5.0,
+      "velocidadMax": 150.0,
+      "propulsion": "PISTON"
+    },
+    "costoVuelo": 328500.0
+  },
+  {
+    "id": "11",
+    "fecha": "2021-06-26",
+    "origen": "CORDOBA",
+    "destino": "MONTEVIDEO",
+    "clientUsername": "MARTINOLGAS",
+    "acompañantes": 2.0,
+    "avion": {
+      "id": "011",
+      "tarifa": 3000.0,
+      "categoria": "Bronce",
+      "capacidadCombustible": 12.0,
+      "costoKm": 150.0,
+      "capacidadMax": 5.0,
+      "velocidadMax": 150.0,
+      "propulsion": "PISTON"
+    },
+    "costoVuelo": 192000.0
+  },
+  {
+    "id": "0010",
+    "fecha": "2021-08-30",
+    "origen": "BSAS",
+    "destino": "CORDOBA",
+    "clientUsername": "MARTINOLGAS",
+    "acompañantes": 1.0,
+    "avion": {
+      "id": "00000",
+      "tarifa": 4000.0,
+      "categoria": "Silver",
+      "capacidadCombustible": 15.0,
+      "costoKm": 225.0,
+      "capacidadMax": 7.0,
+      "velocidadMax": 180.0,
+      "propulsion": "REACCION"
+    },
+    "costoVuelo": 167375.0
+  },
+  {
+    "id": "00100",
+    "fecha": "2021-09-22",
+    "origen": "BSAS",
+    "destino": "MONTEVIDEO",
+    "clientUsername": "MARTINOLGAS",
+    "acompañantes": 1.0,
+    "avion": {
+      "id": "11000",
+      "tarifa": 4000.0,
+      "categoria": "Silver",
+      "capacidadCombustible": 15.0,
+      "costoKm": 225.0,
+      "capacidadMax": 7.0,
+      "velocidadMax": 180.0,
+      "propulsion": "REACCION"
+    },
+    "costoVuelo": 224750.0
+  },
+  {
+    "id": "1000",
+    "fecha": "2021-10-12",
+    "origen": "CORDOBA",
+    "destino": "MONTEVIDEO",
+    "clientUsername": "LEANDROMARTINEZ",
+    "acompañantes": 1,
+    "avion": {
+      "id": "10010",
+      "tarifa": 6000,
+      "categoria": "Gold",
+      "capacidadCombustible": 20,
+      "costoKm": 300.0,
+      "capacidadMax": 10,
+      "velocidadMax": 200,
+      "propulsion": "REACCION"
+    },
+    "costoVuelo": 370000.0
   }
 ]

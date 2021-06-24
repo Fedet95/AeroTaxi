@@ -5,7 +5,8 @@
     "DNI": 38829242,
     "edad": 26,
     "username": "FEDERICOTACCHINI",
-    "pw": "QWE12"
+    "pw": "QWE12",
+    "totalGastado": 0.0
   },
   {
     "nombre": "PEPITO",
@@ -13,7 +14,26 @@
     "DNI": 27234543,
     "edad": 26,
     "username": "PEPITOJUAREZ",
-    "pw": "QWE12"
+    "pw": "QWE12",
+    "totalGastado": 0.0
+  },
+  {
+    "nombre": "MARTIN",
+    "apellido": "OLGAS",
+    "DNI": 1234567,
+    "edad": 18,
+    "username": "MARTINOLGAS",
+    "pw": "QWE12",
+    "totalGastado": 0.0
+  },
+  {
+    "nombre": "Marcelo",
+    "apellido": "Juarez",
+    "DNI": 32453452,
+    "edad": 25,
+    "username": "MARCELOJUAREZ",
+    "pw": "qwe12",
+    "totalGastado": 0.0
   },
   {
     "nombre": "LEANDRO",
@@ -21,6 +41,8 @@
     "DNI": 12335565,
     "edad": 28,
     "username": "LEANDROMARTINEZ",
-    "pw": "12345"
+    "pw": "12345",
+    "totalGastado": 370000.0,
+    "mejorFlotaUtilizada": "Gold"
   }
 ]

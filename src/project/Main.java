@@ -52,6 +52,7 @@ public class Main {
 
         File archivoUsuarios = new File("Usuarios.txt");
         File archivoVuelos = new File("Vuelos.txt");
+        File archivoAviones = new File("Aviones.txt");
 
         List<Avion> avionList = crearListaAvion();
         crearArchivoAvion(avionList);
@@ -88,7 +89,7 @@ public class Main {
                             String confirmacion = pedirString().toUpperCase(Locale.ROOT);
                             if (confirmacion.equals("SI")) {
                                 System.out.println("Registro completo");
-                                agregarUsuarioFile(archivoUsuarios, nuevo);
+                                agregarEnArchivo(archivoUsuarios, nuevo);
                             } else {
                                 System.out.println("Operacion cancelada. regresando al menu");
                             }
@@ -103,7 +104,7 @@ public class Main {
                         break;
                     case 3:
                         System.out.println("Ingreso como Administrador");
-                        menuAdmin(archivoUsuarios, archivoVuelos);
+                        menuAdmin(archivoUsuarios, archivoVuelos, archivoAviones);
                         break;
                     case 4:
                         System.out.println("Cerrando Aero-Taxi");
@@ -150,15 +151,19 @@ public class Main {
                             System.out.println("Escriba 'SI' para confirmar");
                             confirmacion = pedirString().toUpperCase(Locale.ROOT);
                             if (confirmacion.equals("SI")) {
+
+                                agregarEnArchivo(archivoVuelos, vueloReserva);
+                                //Se actualiza la mejor flota utilizada en caso de ser necesario
+                                if (usuario.getMejorFlotaUtilizada() == null)
+                                    usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
+                                else if ((usuario.getMejorFlotaUtilizada().equals("Bronce") && vueloReserva.getAvion().getCategoria().equals("Silver")) || (usuario.getMejorFlotaUtilizada().equals("Bronce") && vueloReserva.getAvion().getCategoria().equals("Gold")))
+                                    usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
+                                else if (usuario.getMejorFlotaUtilizada().equals("Silver") && vueloReserva.getAvion().getCategoria().equals("Gold"))
+                                    usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
+
+                                //Se actualiza el total gastado por el usuario
                                 usuario.setTotalGastado(usuario.getTotalGastado() + vueloReserva.getCostoVuelo());
-                                agregarVueloFile(archivoVuelos, vueloReserva);
-                                if (usuario.getMejorFlotaUtilizada() == null) ///Se cambia a una mejor flota utilizada en caso de ser necesario
-                                    usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
-                                else if ((usuario.getMejorFlotaUtilizada().equals("Bronce") && vueloReserva.getAvion().getCategoria().equals("Silver")) ||(usuario.getMejorFlotaUtilizada().equals("Bronce") &&vueloReserva.getAvion().getCategoria().equals("Gold"))) {
-                                    usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
-                                } else if (usuario.getMejorFlotaUtilizada().equals("Silver") && vueloReserva.getAvion().getCategoria().equals("Gold")) {
-                                    usuario.setMejorFlotaUtilizada(vueloReserva.getAvion().getCategoria());
-                                }
+                                actualizarUsuarioFile(usuario);
                             } else
                                 System.out.println("Operacion cancelada. Regresando al menu");
                         }
@@ -197,7 +202,7 @@ public class Main {
         }
     }
 
-    public static void menuAdmin(File archivoUsuario, File archivoVuelos) {
+    public static void menuAdmin(File archivoUsuario, File archivoVuelos, File archivoAviones) {
         int opcion;
         boolean salir = false;
         System.out.println("AERO-TAXI");
@@ -217,7 +222,7 @@ public class Main {
                 switch (opcion) {
                     case 1:
                         System.out.println("Listado de Clientes");
-                        mostrarUsuariosFile(archivoUsuario);
+                        mostrarArchivos(archivoUsuario);
                         break;
                     case 2:
                         System.out.println("Vuelos programados por fecha indicada");
@@ -226,10 +231,10 @@ public class Main {
                         break;
                     case 3:
                         System.out.println("Aviones disponibles para reservas");
-                        mostrarAvionesFile();
+                        mostrarArchivos(archivoAviones);
                         break;
                     case 4:
-                        System.out.println("Cerrando Aero-Taxi");
+                        System.out.println("Saliendo...");
                         salir = true;
                         break;
                     default:
@@ -317,32 +322,34 @@ public class Main {
         return dni;
     }
 
-    public static void agregarUsuarioFile(File archivo, Usuario usuario) {
+    public static void actualizarUsuarioFile(Usuario usuario) {
 
-        if (archivo.exists()) {
-            List<Usuario> usuarioList = null;
-            try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
+        List<Usuario> usuarioList = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader("Usuarios.txt"))) {
+            usuarioList = gson.fromJson(reader, (new TypeToken<List<Usuario>>() {
+            }.getType()));
 
-                usuarioList = gson.fromJson(reader, (new TypeToken<List<Usuario>>() {
-                }.getType()));
-
-                if (usuarioList == null) {
-                    usuarioList = new ArrayList<>();
+            if (usuarioList == null)
+                System.out.println("El usuario no se encuentra registrado");
+            else {
+                for (Usuario aux : usuarioList) {
+                    if (aux.getUsername().compareTo(usuario.getUsername()) == 0) {
+                        usuarioList.remove(aux);
+                        usuarioList.add(usuario);
+                    }
                 }
-                usuarioList.add(usuario);
-
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
             }
 
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
-                gson.toJson(usuarioList, usuarioList.getClass(), writer);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Usuarios.txt"))) {
+            gson.toJson(usuarioList, usuarioList.getClass(), writer);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
+
     ///endregion
 
     ///region Metodos para manejo de vuelos
@@ -443,7 +450,6 @@ public class Main {
         }
         return avionElegido;
     }
-
 
     public static Vuelo reservarVuelo(File archivo, Usuario usuario) {
 
@@ -583,32 +589,8 @@ public class Main {
         return encontrado;
     }
 
-    public static void agregarVueloFile(File archivo, Vuelo vuelo) {
-
-        if (archivo.exists()) {
-            List<Vuelo> vueloList = null;
-            try (BufferedReader reader = new BufferedReader(new FileReader(new File("Vuelos.txt")))) {
-
-                vueloList = gson.fromJson(reader, (new TypeToken<List<Vuelo>>() {
-                }.getType()));
-
-                if (vueloList == null) {
-                    vueloList = new ArrayList<>();
-                }
-
-                vueloList.add(vuelo);
 
 
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(new File("Vuelos.txt")))) {
-                gson.toJson(vueloList, vueloList.getClass(), writer);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
 
     public static void borrarVueloFile(File archivo, Vuelo vuelo) {
 
@@ -647,26 +629,6 @@ public class Main {
     ///region Metodos de Administrador
 
 
-    public static void mostrarUsuariosFile(File archivo) {
-
-        if (archivo.exists()) {
-            List<Usuario> usuarioList = null;
-            try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
-                usuarioList = gson.fromJson(reader, (new TypeToken<List<Usuario>>() {
-                }.getType()));
-
-                if (usuarioList != null) {
-                    for (Usuario usuarios : usuarioList) {
-                        System.out.println(usuarios);
-                    }
-                } else
-                    System.out.println("No hay usuarios registrados en el Sistema");
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
     public static void mostrarVuelosPorFecha(File archivoVuelos, LocalDate fechaBuscada) {
 
         if (archivoVuelos.exists()) {
@@ -701,25 +663,55 @@ public class Main {
         }
     }
 
-    public static void mostrarAvionesFile(){
 
-            List<Avion> avionList = null;
-            try (BufferedReader reader = new BufferedReader(new FileReader(new File("Aviones.txt")))) {
-                avionList = gson.fromJson(reader, (new TypeToken<List<Avion>>() {}.getType()));
+    ///endregion
 
-                if (avionList != null) {
-                    for (Avion aviones   : avionList) {
-                        System.out.println(aviones);
+    //region Metodos genericos para utilizar archivos
+    public static <T> void mostrarArchivos(File archivo) {
+        if (archivo.exists()) {
+            List<T> tList = null;
+            try (BufferedReader reader = new BufferedReader((new FileReader(archivo)))) {
+                tList = gson.fromJson(reader, (new TypeToken<List<T>>() {
+                }.getType()));
+
+                if (tList != null) {
+                    for (T t : tList) {
+                        System.out.println(t);
                     }
                 } else
-                    System.out.println("No hay aviones registrados en el Sistema");
+                    System.out.println("No hay registros en el archivo");
+
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-
+        }
     }
 
-    ///endregion
+    public static <T> void agregarEnArchivo(File archivo, T t) {
+
+        if (archivo.exists()) {
+            List<T> tList = null;
+            try (BufferedReader reader = new BufferedReader((new FileReader(archivo)))) {
+
+                tList = gson.fromJson(reader, (new TypeToken<List<T>>() {
+                }.getType()));
+                if (tList == null)
+                    tList = new ArrayList<>();
+
+                tList.add(t);
+
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(archivo))) {
+                gson.toJson(tList, tList.getClass(), writer);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+    //endregion
 }
 
 
