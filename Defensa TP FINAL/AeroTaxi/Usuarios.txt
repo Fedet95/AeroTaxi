@@ -1,0 +1,47 @@
+[
+  {
+    "nombre": "FEDERICO",
+    "apellido": "TACCHINI",
+    "DNI": 38829242,
+    "edad": 26,
+    "username": "FEDERICOTACCHINI",
+    "pw": "QWE12",
+    "totalGastado": 0.0
+  },
+  {
+    "nombre": "PEPITO",
+    "apellido": "JUAREZ",
+    "DNI": 27234543,
+    "edad": 26,
+    "username": "PEPITOJUAREZ",
+    "pw": "QWE12",
+    "totalGastado": 0.0
+  },
+  {
+    "nombre": "LEANDRO",
+    "apellido": "MARTINEZ",
+    "DNI": 12335565,
+    "edad": 28,
+    "username": "LEANDROMARTINEZ",
+    "pw": "12345",
+    "totalGastado": 0.0
+  },
+  {
+    "nombre": "Samuel",
+    "apellido": "Tocaimaza",
+    "DNI": 32836243,
+    "edad": 34,
+    "username": "SAMUELTOCAIMAZA",
+    "pw": "12345",
+    "totalGastado": 0.0
+  },
+  {
+    "nombre": "Daniela",
+    "apellido": "Muñoz",
+    "DNI": 94428878,
+    "edad": 34,
+    "username": "DANIELAMUÑOZ",
+    "pw": "98745",
+    "totalGastado": 0.0
+  }
+]

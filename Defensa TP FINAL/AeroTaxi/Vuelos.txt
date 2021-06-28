@@ -1,0 +1,40 @@
+[
+  {
+    "id": "1001",
+    "fecha": "2021-08-22",
+    "origen": "BSAS",
+    "destino": "MONTEVIDEO",
+    "clientUsername": "FEDERICOTACCHINI",
+    "acompañantes": 3,
+    "avion": {
+      "id": "10",
+      "tarifa": 3000,
+      "categoria": "Bronce",
+      "capacidadCombustible": 12,
+      "costoKm": 150.0,
+      "capacidadMax": 5,
+      "velocidadMax": 150,
+      "propulsion": "PISTON"
+    },
+    "costoVuelo": 159500.0
+  },
+  {
+    "id": "01101",
+    "fecha": "2021-06-29",
+    "origen": "CORDOBA",
+    "destino": "SANTIAGO",
+    "clientUsername": "DANIELAMUÑOZ",
+    "acompañantes": 4,
+    "avion": {
+      "id": "111",
+      "tarifa": 3000,
+      "categoria": "Bronce",
+      "capacidadCombustible": 12,
+      "costoKm": 150.0,
+      "capacidadMax": 5,
+      "velocidadMax": 150,
+      "propulsion": "PISTON"
+    },
+    "costoVuelo": 178000.0
+  }
+]
